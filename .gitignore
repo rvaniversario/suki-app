@@ -1,0 +1,15 @@
+# raw report PDFs (re-fetched on demand, cached in Actions)
+.cache/
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# app
+app/node_modules/
+app/dist/
+app/test-results/
+app/playwright-report/
+app/.env
+app/.env.local
+*.log

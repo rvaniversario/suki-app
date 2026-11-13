@@ -1,0 +1,380 @@
+# NCR catalog: report rows -> app items.
+#
+# Two report layouts exist in 2026:
+#   - until late October: sections "FISH PRODUCTS", "BEEF MEAT PRODUCTS", "PORK MEAT PRODUCTS",
+#     "POULTRY PRODUCTS", names like "Beef Brisket, Local" (same wording as MIMAROPA)
+#   - from late October: "FISHERIES AND SEAFOOD", "BEEF", "PORK", "CHICKEN", ...
+#     names like "Brisket (Punta y Pecho), Local"
+# Both feed the same item so history continues. Ids match the MIMAROPA catalog where
+# the commodity is the same, so tracked goods carry over when the region changes.
+#
+# Chicken: the new layout splits Bounty Fresh / Magnolia / Unbranded; the old one
+# printed the brand in the specification column ("Unbranded, Fresh", and "Fully Dressed"
+# for whole chicken, which the new layout calls "Unbranded"). Items here are the
+# unbranded ones.
+
+# ---------------------------------------------------------------- fish
+- id: fish.tilapia
+  name: Tilapia
+  category: fish
+  featured: true
+  detail: Medium, 5–6 pcs/kg
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Tilapia" }
+    - { section: "FISH PRODUCTS", raw: "Tilapia" }
+- id: fish.bangus-large
+  name: Bangus (large)
+  category: fish
+  featured: true
+  detail: 1–2 pcs/kg
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Milkfish (Bangus)", spec: "Large (1-2 pcs/kg)" }
+    - { section: "FISH PRODUCTS", raw: "Bangus, Large" }
+- id: fish.bangus-medium
+  name: Bangus (medium)
+  category: fish
+  featured: true
+  detail: 3–4 pcs/kg
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Milkfish (Bangus)", spec: "Medium (3-4 pcs/kg)" }
+    - { section: "FISH PRODUCTS", raw: "Bangus, Medium" }
+- id: fish.galunggong-local
+  name: Galunggong (local)
+  category: fish
+  featured: true
+  detail: Medium, 12–14 pcs/kg
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Roundscad (Galunggong), Local" }
+    - { section: "FISH PRODUCTS", raw: "Galunggong, Local" }
+- id: fish.galunggong-imported
+  name: Galunggong (imported)
+  category: fish
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Roundscad (Galunggong), Imported" }
+    - { section: "FISH PRODUCTS", raw: "Galunggong, Imported" }
+- id: fish.alumahan
+  name: Alumahan
+  category: fish
+  featured: true
+  detail: 4–6 pcs/kg
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Indian Mackerel (Alumahan), Local" }
+    - { section: "FISH PRODUCTS", raw: "Alumahan (Indian Mackerel)" }
+- id: fish.tamban
+  name: Tamban (sardines)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Sardines (Tamban), Local" }
+    - { section: "FISH PRODUCTS", raw: "Sardines (Tamban)" }
+- id: fish.pusit
+  name: Pusit bisaya (squid)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Squid (Pusit Bisaya), Local" }
+    - { section: "FISH PRODUCTS", raw: "Squid (Pusit Bisaya), Local" }
+- id: fish.tambakol
+  name: Tambakol (yellow-fin tuna)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Yellow-Fin Tuna (Tambakol), Local" }
+    - { section: "FISH PRODUCTS", raw: "Tambakol (Yellow-Fin Tuna), Local" }
+- id: fish.tanigue
+  name: Tanigue
+  category: fish
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Spanish Mackerel (Tanigue), Local" }
+    - { section: "FISH PRODUCTS", raw: "Tanigue" }
+- id: fish.pampano-local
+  name: Pampano (local)
+  category: fish
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Pompano (Pampano), Local" }
+    - { section: "FISH PRODUCTS", raw: "Pampano, Local" }
+- id: fish.salmon-belly
+  name: Salmon belly (imported)
+  category: fish
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Salmon Belly, Imported" }
+    - { section: "FISH PRODUCTS", raw: "Salmon Belly, Imported" }
+- id: fish.salmon-head
+  name: Salmon head (imported)
+  category: fish
+  rows:
+    - { section: "FISHERIES AND SEAFOOD", raw: "Salmon Head, Imported" }
+    - { section: "FISH PRODUCTS", raw: "Salmon Head, Imported" }
+
+# ---------------------------------------------------------------- pork
+- id: pork.kasim
+  name: Pork kasim
+  category: pork
+  featured: true
+  detail: Picnic shoulder
+  rows:
+    - { section: "PORK", raw: "Picnic Shoulder (Kasim), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Picnic Shoulder (Kasim), Local" }
+- id: pork.liempo
+  name: Pork liempo
+  category: pork
+  featured: true
+  detail: Belly
+  rows:
+    - { section: "PORK", raw: "Belly (Liempo), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Belly (Liempo), Local" }
+- id: pork.chop
+  name: Pork chop
+  category: pork
+  featured: true
+  rows:
+    - { section: "PORK", raw: "Chop, Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Chop, Local" }
+- id: pork.pigue
+  name: Pork pigue
+  category: pork
+  featured: true
+  detail: Hind leg
+  rows:
+    - { section: "PORK", raw: "Hind Leg (Pigue), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Hind Leg (Pigue), Local" }
+- id: pork.spare-ribs
+  name: Pork spare ribs
+  category: pork
+  featured: true
+  rows:
+    - { section: "PORK", raw: "Spare Ribs, Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Spare Ribs, Local" }
+- id: pork.boston-shoulder
+  name: Pork Boston shoulder
+  category: pork
+  featured: true
+  rows:
+    - { section: "PORK", raw: "Boston Shoulder (Paypay), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Boston Shoulder, Local" }
+- id: pork.loin
+  name: Pork loin
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Loin (Lomo), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Loin, Local" }
+- id: pork.fore-shank
+  name: Pork pata (fore shank)
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Fore Shank (Pata Unahan), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Fore Shank, Local" }
+- id: pork.hind-shank
+  name: Pork pata (hind shank)
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Hind Shank (Pata Hulihan), Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Hind Shank, Local" }
+- id: pork.head
+  name: Pork head
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Head, Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Head, Local" }
+- id: pork.rind
+  name: Pork rind (skin)
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Rind/Skin, Local" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Rind/Skin, Local" }
+- id: pork.liempo-imported
+  name: Pork liempo (imported, frozen)
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Belly (Liempo), Imported" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Belly (Liempo), Imported" }
+- id: pork.kasim-imported
+  name: Pork kasim (imported, frozen)
+  category: pork
+  rows:
+    - { section: "PORK", raw: "Picnic Shoulder (Kasim), Imported" }
+    - { section: "PORK MEAT PRODUCTS", raw: "Pork Picnic Shoulder (Kasim), Imported" }
+
+# ---------------------------------------------------------------- beef
+- id: beef.brisket
+  name: Beef brisket
+  category: beef
+  featured: true
+  detail: Meat with bones
+  rows:
+    - { section: "BEEF", raw: "Brisket (Punta y Pecho), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Brisket, Local" }
+- id: beef.rump
+  name: Beef rump
+  category: beef
+  featured: true
+  detail: Lean meat, tapadera
+  rows:
+    - { section: "BEEF", raw: "Rump (Tapadera), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Rump, Local" }
+- id: beef.chuck
+  name: Beef chuck
+  category: beef
+  featured: true
+  rows:
+    - { section: "BEEF", raw: "Chuck (Kadera sa Unahan), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Chuck, Local" }
+- id: beef.short-ribs
+  name: Beef short ribs
+  category: beef
+  featured: true
+  rows:
+    - { section: "BEEF", raw: "Short Ribs, Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Short Ribs, Local" }
+- id: beef.loin
+  name: Beef loin
+  category: beef
+  featured: true
+  detail: Tagiliran
+  rows:
+    - { section: "BEEF", raw: "Loin (Tagiliran), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Loin, Local" }
+- id: beef.sirloin
+  name: Beef sirloin
+  category: beef
+  featured: true
+  detail: Lomo
+  rows:
+    - { section: "BEEF", raw: "Sirloin (Lomo), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Sirloin, Local" }
+- id: beef.fore-limb
+  name: Beef fore limb
+  category: beef
+  rows:
+    - { section: "BEEF", raw: "Fore Limb (Paypay at Kenchi sa Unahan), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Fore Limb, Local" }
+- id: beef.forequarter
+  name: Beef forequarter
+  category: beef
+  rows:
+    - { section: "BEEF", raw: "Forequarter, Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Forequarter, Local" }
+- id: beef.flank
+  name: Beef flank
+  category: beef
+  detail: Camto
+  rows:
+    - { section: "BEEF", raw: "Flank (Camto), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Flank, Local" }
+- id: beef.plate
+  name: Beef plate
+  category: beef
+  detail: Tadyang
+  rows:
+    - { section: "BEEF", raw: "Plate (Tadyang), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Plate, Local" }
+- id: beef.rib-eye
+  name: Beef rib eye
+  category: beef
+  rows:
+    - { section: "BEEF", raw: "Rib Eye, Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Rib Eye, Local" }
+- id: beef.rib-set
+  name: Beef rib set
+  category: beef
+  rows:
+    - { section: "BEEF", raw: "Rib Set (Kadera sa Hulihan), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Rib Set, Local" }
+- id: beef.striploin
+  name: Beef striploin
+  category: beef
+  rows:
+    - { section: "BEEF", raw: "Striploin, Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Striploin, Local" }
+- id: beef.tenderloin
+  name: Beef tenderloin
+  category: beef
+  rows:
+    - { section: "BEEF", raw: "Tenderloin, Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Tenderloin, Local" }
+- id: beef.tongue
+  name: Beef tongue
+  category: beef
+  rows:
+    - { section: "BEEF OFFALS", raw: "Tongue (Dila), Local" }
+    - { section: "BEEF MEAT PRODUCTS", raw: "Beef Tongue, Local" }
+
+# ---------------------------------------------------------------- chicken
+- id: chicken.whole
+  name: Whole chicken
+  category: chicken
+  featured: true
+  detail: Fully dressed, unbranded
+  rows:
+    - { section: "CHICKEN", raw: "Whole Chicken, Unbranded" }
+    - { section: "POULTRY PRODUCTS", raw: "Whole Chicken, Local", spec: "Fully Dressed" }
+- id: chicken.whole-magnolia
+  name: Whole chicken (Magnolia)
+  category: chicken
+  rows:
+    - { section: "CHICKEN", raw: "Whole Chicken, Magnolia" }
+    - { section: "POULTRY PRODUCTS", raw: "Whole Chicken, Local", spec: "Magnolia" }
+- id: chicken.whole-bounty-fresh
+  name: Whole chicken (Bounty Fresh)
+  category: chicken
+  rows:
+    - { section: "CHICKEN", raw: "Whole Chicken, Bounty Fresh" }
+    - { section: "POULTRY PRODUCTS", raw: "Whole Chicken, Local", spec: "Bounty Fresh" }
+- id: chicken.breast
+  name: Chicken breast
+  category: chicken
+  featured: true
+  detail: Unbranded
+  rows:
+    - { section: "CHICKEN", raw: "Breast (Pecho), Unbranded" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Breast, Local", spec: "Unbranded, Fresh" }
+- id: chicken.drumstick
+  name: Chicken drumstick
+  category: chicken
+  featured: true
+  detail: Unbranded
+  rows:
+    - { section: "CHICKEN", raw: "Drumstick, Unbranded" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Drumstick, Local", spec: "Unbranded, Fresh" }
+- id: chicken.leg-quarter
+  name: Chicken leg quarter
+  category: chicken
+  featured: true
+  detail: Unbranded
+  rows:
+    - { section: "CHICKEN", raw: "Leg Quarter, Unbranded" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Leg Quarter", spec: "Unbranded, Fresh" }
+- id: chicken.thigh
+  name: Chicken thigh
+  category: chicken
+  featured: true
+  rows:
+    - { section: "CHICKEN", raw: "Thigh, Unbranded" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Thigh, Local" }
+- id: chicken.wing
+  name: Chicken wing
+  category: chicken
+  featured: true
+  detail: Unbranded
+  rows:
+    - { section: "CHICKEN", raw: "Wings (Pakpak), Unbranded" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Wing, Local", spec: "Unbranded, Fresh" }
+- id: chicken.liver
+  name: Chicken liver
+  category: chicken
+  featured: true
+  rows:
+    - { section: "CHICKEN OFFALS", raw: "Liver (Atay), Local" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Liver, Local" }
+- id: chicken.feet
+  name: Chicken feet
+  category: chicken
+  rows:
+    - { section: "CHICKEN", raw: "Feet (Paa/Adidas), Local" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Feet, Local" }
+- id: chicken.neck
+  name: Chicken neck
+  category: chicken
+  rows:
+    - { section: "CHICKEN", raw: "Neck, Local" }
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Neck, Local" }

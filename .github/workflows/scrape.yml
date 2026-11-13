@@ -1,0 +1,88 @@
+name: Scrape prices
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 10:00 Asia/Manila
+  workflow_dispatch:
+    inputs:
+      region:
+        description: Region to scrape
+        default: all
+        type: choice
+        options: [all, mimaropa, ncr]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - run: pip install -r scraper/requirements.txt
+
+      # Raw PDFs stay out of git; keep them between runs so nothing is downloaded twice.
+      - uses: actions/cache@v4
+        with:
+          path: .cache/pdfs
+          key: pdfs-${{ github.run_id }}
+          restore-keys: pdfs-
+
+      - name: Run scraper
+        id: run
+        env:
+          GOOGLE_DRIVE_API_KEY: ${{ secrets.GOOGLE_DRIVE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ vars.VAPID_SUBJECT }}
+          SUKI_APP_URL: ${{ vars.APP_URL }}
+        # Non-zero when no new file has been found for 5 days; commit what we have first.
+        run: |
+          set +e
+          python -m scraper run --region "${{ inputs.region || 'all' }}"
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Commit data
+        id: commit
+        run: |
+          git add data
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git config user.name "suki-scraper"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "data: prices $(date -u +%Y-%m-%d)"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail when reports have stopped
+        if: steps.run.outputs.code != '0'
+        run: |
+          echo "::error::No new price report for 5 days (or the scraper failed). See the log above."
+          exit 1
+
+  # Pushes made with GITHUB_TOKEN do not trigger other workflows, so deploy from here.
+  deploy:
+    needs: scrape
+    if: always() && needs.scrape.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write

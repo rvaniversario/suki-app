@@ -1,0 +1,317 @@
+# MIMAROPA catalog: report rows -> app items.
+#
+# Two report layouts exist in 2026:
+#   - until October: short meat list under "FISH" and "LIVESTOCK & POULTRY PRODUCTS"
+#     ("Bangus (Large)", "Pork Ham", "Pork Belly", "Whole Chicken", ...)
+#   - from November: full layout ("FISH PRODUCTS", "BEEF PRODUCTS", "PORK PRODUCTS", "POULTRY PRODUCTS")
+# Both feed the same item where the commodity is the same, so history continues.
+#
+# Duplicate rows ("Whole Chicken, Local" x4 and similar) are told apart by occurrence.
+# The report drops the column that names them, so they are not labelled here. The 4th
+# occurrence is the one priced every day and continues the old "Whole Chicken" series
+# (same range, 190-230), so that is the featured one.
+#
+# Rows without an entry are still stored under auto ids (auto.<section>.<name>).
+
+# ---------------------------------------------------------------- fish
+- id: fish.tilapia
+  name: Tilapia
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Tilapia" }
+    - { section: "FISH", raw: "Tilapia" }
+- id: fish.bangus-large
+  name: Bangus (large)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Bangus, Large" }
+    - { section: "FISH", raw: "Bangus (Large)" }
+- id: fish.bangus-medium
+  name: Bangus (medium)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Bangus, Medium" }
+    - { section: "FISH", raw: "Bangus (Medium)" }
+- id: fish.galunggong-local
+  name: Galunggong (local)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Galunggong, Local" }
+    - { section: "FISH", raw: "Galunggong (Local)" }
+- id: fish.galunggong-imported
+  name: Galunggong (imported)
+  category: fish
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Galunggong, Imported" }
+    - { section: "FISH", raw: "Galunggong (Imported)" }
+- id: fish.alumahan
+  name: Alumahan
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Alumahan (Indian Mackerel)" }
+    - { section: "FISH", raw: "Alumahan" }
+- id: fish.tamban
+  name: Tamban (sardines)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Sardines (Tamban)" }
+    - { section: "FISH", raw: "Sardines (Tamban)" }
+- id: fish.pusit
+  name: Pusit bisaya (squid)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Squid (Pusit Bisaya), Local" }
+    - { section: "FISH", raw: "Squid (Pusit Bisaya)" }
+- id: fish.tambakol
+  name: Tambakol (yellow-fin tuna)
+  category: fish
+  featured: true
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Tambakol (Yellow-Fin Tuna), Local" }
+    - { section: "FISH", raw: "Yellow-Fin Tuna (Tambakol)" }
+- id: fish.bonito
+  name: Bonito (frigate tuna)
+  category: fish
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Bonito (Frigate Tuna)" }
+    - { section: "FISH", raw: "Bonito" }
+- id: fish.salmon-head
+  name: Salmon head
+  category: fish
+  rows:
+    - { section: "FISH PRODUCTS", raw: "Salmon Head, Local" }
+    - { section: "FISH", raw: "Salmon Head" }
+- id: fish.mackerel-local
+  name: Mackerel (local)
+  category: fish
+  raw: "Mackerel, Local"
+  section: "FISH PRODUCTS"
+- id: fish.pampano-local
+  name: Pampano (local)
+  category: fish
+  raw: "Pampano, Local"
+  section: "FISH PRODUCTS"
+
+# ---------------------------------------------------------------- pork
+- id: pork.kasim
+  name: Pork kasim
+  category: pork
+  featured: true
+  detail: Picnic shoulder
+  rows:
+    - { section: "PORK PRODUCTS", raw: "Pork Picnic Shoulder (Kasim), Local" }
+    - { section: "LIVESTOCK & POULTRY PRODUCTS", raw: "Pork Ham" }
+- id: pork.liempo
+  name: Pork liempo
+  category: pork
+  featured: true
+  detail: Belly
+  rows:
+    - { section: "PORK PRODUCTS", raw: "Pork Belly (Liempo), Local" }
+    - { section: "LIVESTOCK & POULTRY PRODUCTS", raw: "Pork Belly" }
+- id: pork.chop
+  name: Pork chop
+  category: pork
+  featured: true
+  raw: "Pork Chop, Local"
+  section: "PORK PRODUCTS"
+- id: pork.pigue
+  name: Pork pigue
+  category: pork
+  featured: true
+  detail: Hind leg
+  raw: "Pork Hind Leg (Pigue), Local"
+  section: "PORK PRODUCTS"
+- id: pork.spare-ribs
+  name: Pork spare ribs
+  category: pork
+  featured: true
+  raw: "Pork Spare Ribs, Local"
+  section: "PORK PRODUCTS"
+- id: pork.boston-shoulder
+  name: Pork Boston shoulder
+  category: pork
+  featured: true
+  raw: "Pork Boston Shoulder, Local"
+  section: "PORK PRODUCTS"
+- id: pork.loin
+  name: Pork loin
+  category: pork
+  raw: "Pork Loin, Local"
+  section: "PORK PRODUCTS"
+- id: pork.fore-shank
+  name: Pork pata (fore shank)
+  category: pork
+  raw: "Pork Fore Shank, Local"
+  section: "PORK PRODUCTS"
+- id: pork.hind-shank
+  name: Pork pata (hind shank)
+  category: pork
+  raw: "Pork Hind Shank, Local"
+  section: "PORK PRODUCTS"
+- id: pork.head
+  name: Pork head
+  category: pork
+  raw: "Pork Head, Local"
+  section: "PORK PRODUCTS"
+- id: pork.offals
+  name: Pork offals
+  category: pork
+  raw: "Pork Offals, Local"
+  section: "PORK PRODUCTS"
+- id: pork.rind
+  name: Pork rind (skin)
+  category: pork
+  raw: "Pork Rind/Skin, Local"
+  section: "PORK PRODUCTS"
+
+# ---------------------------------------------------------------- beef
+- id: beef.brisket
+  name: Beef brisket
+  category: beef
+  featured: true
+  rows:
+    - { section: "BEEF PRODUCTS", raw: "Beef Brisket, Local" }
+    - { section: "LIVESTOCK & POULTRY PRODUCTS", raw: "Beef Brisket" }
+- id: beef.rump
+  name: Beef rump
+  category: beef
+  featured: true
+  rows:
+    - { section: "BEEF PRODUCTS", raw: "Beef Rump, Local" }
+    - { section: "LIVESTOCK & POULTRY PRODUCTS", raw: "Beef Rump" }
+- id: beef.chuck
+  name: Beef chuck
+  category: beef
+  featured: true
+  raw: "Beef Chuck, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.short-ribs
+  name: Beef short ribs
+  category: beef
+  featured: true
+  raw: "Beef Short Ribs, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.loin
+  name: Beef loin
+  category: beef
+  featured: true
+  raw: "Beef Loin, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.sirloin
+  name: Beef sirloin
+  category: beef
+  featured: true
+  raw: "Beef Sirloin, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.fore-limb
+  name: Beef fore limb
+  category: beef
+  raw: "Beef Fore Limb, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.forequarter
+  name: Beef forequarter
+  category: beef
+  raw: "Beef Forequarter, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.flank
+  name: Beef flank
+  category: beef
+  raw: "Beef Flank, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.plate
+  name: Beef plate
+  category: beef
+  raw: "Beef Plate, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.rib-eye
+  name: Beef rib eye
+  category: beef
+  raw: "Beef Rib Eye, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.rib-set
+  name: Beef rib set
+  category: beef
+  raw: "Beef Rib Set, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.striploin
+  name: Beef striploin
+  category: beef
+  raw: "Beef Striploin, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.tenderloin
+  name: Beef tenderloin
+  category: beef
+  raw: "Beef Tenderloin, Local"
+  section: "BEEF PRODUCTS"
+- id: beef.tongue
+  name: Beef tongue
+  category: beef
+  raw: "Beef Tongue, Local"
+  section: "BEEF PRODUCTS"
+
+# ---------------------------------------------------------------- chicken
+- id: chicken.whole
+  name: Whole chicken
+  category: chicken
+  featured: true
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Whole Chicken, Local", occurrence: 4 }
+    - { section: "LIVESTOCK & POULTRY PRODUCTS", raw: "Whole Chicken" }
+- id: chicken.breast
+  name: Chicken breast
+  category: chicken
+  featured: true
+  raw: "Chicken Breast, Local"
+  section: "POULTRY PRODUCTS"
+  occurrence: 4
+- id: chicken.drumstick
+  name: Chicken drumstick
+  category: chicken
+  featured: true
+  raw: "Chicken Drumstick, Local"
+  section: "POULTRY PRODUCTS"
+  occurrence: 4
+- id: chicken.leg-quarter
+  name: Chicken leg quarter
+  category: chicken
+  featured: true
+  raw: "Chicken Leg Quarter"
+  section: "POULTRY PRODUCTS"
+  occurrence: 4
+- id: chicken.thigh
+  name: Chicken thigh
+  category: chicken
+  featured: true
+  raw: "Chicken Thigh, Local"
+  section: "POULTRY PRODUCTS"
+- id: chicken.wing
+  name: Chicken wing
+  category: chicken
+  featured: true
+  raw: "Chicken Wing, Local"
+  section: "POULTRY PRODUCTS"
+  occurrence: 4
+- id: chicken.liver
+  name: Chicken liver
+  category: chicken
+  featured: true
+  raw: "Chicken Liver, Local"
+  section: "POULTRY PRODUCTS"
+- id: chicken.feet
+  name: Chicken feet
+  category: chicken
+  raw: "Chicken Feet, Local"
+  section: "POULTRY PRODUCTS"
+- id: chicken.neck
+  name: Chicken neck
+  category: chicken
+  raw: "Chicken Neck, Local"
+  section: "POULTRY PRODUCTS"
