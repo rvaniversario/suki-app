@@ -2,6 +2,24 @@
 
 "Suki" is a working name. Keep it in one constant so it can be renamed.
 
+> **Changes since this spec (2026-11-15).** The sections below are the original v1 spec. Where they
+> differ, the code and README win:
+>
+> - **Data source:** every region (all 17) uses the Bantay Presyo Power BI source (section 4.3) for
+>   regional prices, rankings and per-market prices. The MIMAROPA and NCR PDF scrapers (4.1, 4.2) are
+>   kept but not run. Catalog: `scraper/catalog/bantaypresyo.yaml` (91 goods).
+> - **Goods:** eggs, rice, vegetables, fruits, spices and other goods are ranked alongside fish and meat,
+>   in any unit; all goods are tracked by default. The weekly plan still covers fish, pork, chicken, beef.
+> - **Prices:** each good shows its newest available price with its date, however old; markets are never
+>   hidden (replaces the 14-day market cut-off in 4.3).
+> - **Hosting and data (replaces sections 3 and 11 "GitHub Actions"):** price data is not committed. One
+>   Docker container serves the app and runs the scraper daily, writing JSON to a volume; no redeploy is
+>   needed for new prices. GitHub Pages and the data-commit workflow are removed.
+> - **Storage:** Supabase keeps a permanent copy of the price data and AI notes (migration
+>   `20261115000000_prices.sql`); an empty volume is restored from it. The app never reads it.
+> - **AI notes (new):** a daily note per region and per market, in English and Filipino, from Google
+>   Gemini (free tier) or OpenAI, with hard daily limits. See README, "AI notes".
+
 ## 1. Goal
 
 A mobile-first web app that shows which fish, pork, chicken and beef are a good buy today, based on government price reports, and turns that into a suggested weekly buying plan.
@@ -414,7 +432,9 @@ These dark values are a starting palette and have not been checked in a browser.
 - Sanity checks per row, logged as warnings: low ≤ average ≤ high; price changed more than 40% from the previous data point.
 - Exit non-zero if no new file has been found for 5 consecutive days, so the workflow shows as failing.
 
-### GitHub Actions
+### GitHub Actions (superseded)
+
+Replaced by the Docker container's daily run; see the note at the top and the README. Kept for reference:
 
 - `scrape.yml`: cron once daily at 10:00 Asia/Manila (02:00 UTC), plus manual dispatch.
 - Secrets: `GOOGLE_DRIVE_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VAPID_PRIVATE_KEY`. Never commit them. The service role key is used only by the scraper, never shipped to the browser.
