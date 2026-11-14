@@ -7,7 +7,7 @@ import logging
 import sys
 from datetime import date, timedelta
 
-from . import config, db, run
+from . import config, db, publish, run
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -33,7 +33,9 @@ def main(argv: list[str] | None = None) -> int:
     p_restore = sub.add_parser("restore", help="rebuild an empty data/ from Supabase (exit 2: nothing stored)")
     p_restore.add_argument("--region", choices=regions, default="all")
 
-    for p in (p_run, p_bf, p_rb, p_push, p_restore):
+    p_pub = sub.add_parser("publish", help="upload changed data files to the public Supabase Storage bucket")
+
+    for p in (p_run, p_bf, p_rb, p_push, p_restore, p_pub):
         p.add_argument("-v", "--verbose", action="store_true")
 
     args = ap.parse_args(argv)
@@ -43,13 +45,15 @@ def main(argv: list[str] | None = None) -> int:
     )
     logging.getLogger("pdfminer").setLevel(logging.ERROR)
     logging.getLogger("urllib3").setLevel(logging.WARNING)
-    selected = config.ACTIVE_REGIONS if args.region == "all" else [args.region]
+    selected = config.ACTIVE_REGIONS if getattr(args, "region", "all") == "all" else [args.region]
 
     if args.cmd == "run":
         return run.run(selected)
     if args.cmd == "backfill":
         start = args.start or run.today_manila() - timedelta(days=args.days)
         return run.backfill(selected, start, args.end)
+    if args.cmd == "publish":
+        return publish.publish()
     if args.cmd == "push":
         return db.push(selected)
     if args.cmd == "restore":

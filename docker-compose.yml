@@ -22,6 +22,9 @@ services:
       AI_WEB_SEARCH: ${AI_WEB_SEARCH:-1}
       AI_DAILY_REQUESTS: ${AI_DAILY_REQUESTS:-40}
       AI_DAILY_TOKENS: ${AI_DAILY_TOKENS:-600000}
+      # Optional: permanent price store in Supabase (scraper/db.py). PRICE_DB=0 turns it off.
+      PRICE_DB: ${PRICE_DB:-1}
+      SUPABASE_BUCKET: ${SUPABASE_BUCKET:-prices}
       # Optional: price drop alerts (see README, Configuration).
       SUPABASE_URL: ${SUPABASE_URL:-}
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
