@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useI18n } from '../i18n';
 import { BackIcon } from '../components/Icons';
 import { LoadState } from '../components/Notices';
-import { featuredIds, useApp } from '../state/AppState';
+import { useApp } from '../state/AppState';
 import { groupItems, SearchBox } from './History';
 
 export function Goods() {
@@ -38,7 +38,6 @@ export function Goods() {
           className="text-link"
           style={{ alignSelf: 'flex-start' }}
           onClick={() => update({ trackedIds: null })}
-          title={featuredIds(latest.data.items).join(', ')}
         >
           {t('goods.reset')}
         </button>

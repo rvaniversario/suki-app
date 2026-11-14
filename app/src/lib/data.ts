@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { DATA_BASE } from '../config';
-import type { History, Latest, Region } from './types';
+import type { History, Insights, Latest, MarketIndex, MarketPrices, Region } from './types';
 
 const memo = new Map<string, Promise<unknown>>();
 
@@ -61,6 +61,10 @@ export const useRegions = () => useData<Region[]>('regions.json');
 export const useLatest = (region: string | null) => useData<Latest>(region ? `${region}/latest.json` : null);
 export const useHistory = (region: string | null, id: string | null) =>
   useData<History>(region && id ? `${region}/history/${id}.json` : null);
+export const useInsights = (region: string | null) => useData<Insights>(region ? `${region}/insights.json` : null);
+export const useMarkets = (region: string | null) => useData<MarketIndex>(region ? `${region}/markets.json` : null);
+export const useMarketPrices = (region: string | null, code: string | null) =>
+  useData<MarketPrices>(region && code ? `${region}/markets/${code}.json` : null);
 
 export function useOnline(): boolean {
   const [online, setOnline] = useState(typeof navigator === 'undefined' ? true : navigator.onLine);

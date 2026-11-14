@@ -315,3 +315,249 @@
   category: chicken
   raw: "Chicken Neck, Local"
   section: "POULTRY PRODUCTS"
+
+# ---------------------------------------------------------------- all other goods
+# Name, category and unit come from bantaypresyo.yaml (same id), so the Power BI market
+# prices line up with these regional figures.
+- id: rice.imported-regular
+  rows:
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Regular Milled" }
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Regular milled (White tag)" }
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Regular milled (Blue tag)" }
+- id: rice.imported-well-milled
+  rows:
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Well Milled" }
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Well milled (White tag)" }
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Well milled (Blue tag)" }
+- id: rice.imported-premium
+  rows:
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Premium" }
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Premium (Yellow tag)" }
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Premium (Blue tag)" }
+- id: rice.imported-special
+  rows:
+    - { section: "IMPORTED COMMERCIAL RICE", raw: "Special (Blue tag)" }
+- id: rice.local-regular
+  rows:
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Regular Milled" }
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Regular milled (White tag)" }
+- id: rice.local-well-milled
+  rows:
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Well Milled" }
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Well milled (White tag)" }
+- id: rice.local-premium
+  rows:
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Premium" }
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Premium (Yellow tag)" }
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Premium (White tag)" }
+- id: rice.local-special
+  rows:
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Special (Blue tag)" }
+    - { section: "LOCAL COMMERCIAL RICE", raw: "Special (White tag)" }
+- id: eggs.white-medium
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Medium)" }
+- id: eggs.white-large
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Large)" }
+- id: eggs.white-extra-large
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Extra Large)" }
+- id: eggs.white-jumbo
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Jumbo)" }
+- id: eggs.white-small
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Small)" }
+- id: eggs.white-extra-small
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Extra Small)" }
+- id: eggs.white-pewee
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (White, Pewee)" }
+- id: eggs.brown-medium
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (Brown, Medium)" }
+- id: eggs.brown-large
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (Brown, Large)" }
+- id: eggs.brown-extra-large
+  rows:
+    - { section: "POULTRY PRODUCTS", raw: "Chicken Egg (Brown, Extra Large)" }
+- id: veg.ampalaya
+  rows:
+    - { section: "LOWLAND VEGETABLES", raw: "Ampalaya" }
+- id: veg.eggplant
+  rows:
+    - { section: "LOWLAND VEGETABLES", raw: "Eggplant" }
+- id: veg.pechay-native
+  rows:
+    - { section: "LOWLAND VEGETABLES", raw: "Pechay (Native)" }
+    - { section: "LOWLAND VEGETABLES", raw: "Native Pechay" }
+- id: veg.sitao
+  rows:
+    - { section: "LOWLAND VEGETABLES", raw: "Sitao" }
+    - { section: "LOWLAND VEGETABLES", raw: "Pole Sitao" }
+- id: veg.squash
+  rows:
+    - { section: "LOWLAND VEGETABLES", raw: "Squash" }
+- id: veg.tomato
+  rows:
+    - { section: "LOWLAND VEGETABLES", raw: "Tomato" }
+- id: veg.bell-pepper-green
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Bell Pepper (Green)" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Bell Pepper (Green), Local" }
+- id: veg.bell-pepper-red
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Bell Pepper (Red)" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Bell Pepper (Red), Local" }
+- id: veg.broccoli
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Broccoli" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Broccoli, Local" }
+- id: veg.cauliflower
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Cauliflower" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Cauliflower, Local" }
+- id: veg.cabbage-scorpio
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Cabbage (Scorpio)" }
+- id: veg.cabbage-rare-ball
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Cabbage (Rare Ball)" }
+- id: veg.cabbage-wonder-ball
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Cabbage (Wonder Ball)" }
+- id: veg.carrots
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Carrots" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Carrots, Local" }
+- id: veg.celery
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Celery" }
+- id: veg.chayote
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Chayote" }
+- id: veg.habichuelas
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Habichuelas (Baguio beans)" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Habichuelas/Baguio Beans, Local" }
+- id: veg.lettuce-green-ice
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Lettuce (Green Ice)" }
+- id: veg.lettuce-iceberg
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Lettuce (Iceberg)" }
+- id: veg.lettuce-romaine
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Lettuce (Romaine)" }
+- id: veg.pechay-baguio
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "Pechay (Baguio)" }
+    - { section: "HIGHLAND VEGETABLES", raw: "Pechay Baguio" }
+- id: veg.potato
+  rows:
+    - { section: "HIGHLAND VEGETABLES", raw: "White Potato" }
+    - { section: "HIGHLAND VEGETABLES", raw: "White Potato, Local" }
+- id: spice.red-onion
+  rows:
+    - { section: "SPICES", raw: "Red Onion" }
+    - { section: "SPICES", raw: "Red Onion, Local" }
+- id: spice.red-onion-imported
+  rows:
+    - { section: "SPICES", raw: "Red Onion (Imported)" }
+    - { section: "SPICES", raw: "Red Onion, Imported" }
+- id: spice.white-onion
+  rows:
+    - { section: "SPICES", raw: "White Onion" }
+    - { section: "SPICES", raw: "White Onion, Local" }
+- id: spice.white-onion-imported
+  rows:
+    - { section: "SPICES", raw: "White Onion (Imported)" }
+    - { section: "SPICES", raw: "White Onion, Imported" }
+- id: spice.garlic-native
+  rows:
+    - { section: "SPICES", raw: "Garlic (Native)" }
+    - { section: "SPICES", raw: "Garlic, Native/Local" }
+- id: spice.garlic-imported
+  rows:
+    - { section: "SPICES", raw: "Garlic (Imported)" }
+    - { section: "SPICES", raw: "Garlic, Imported" }
+- id: spice.ginger
+  rows:
+    - { section: "SPICES", raw: "Ginger" }
+    - { section: "SPICES", raw: "Ginger, Local" }
+- id: spice.chili-red
+  rows:
+    - { section: "SPICES", raw: "Chilli (Red)" }
+    - { section: "SPICES", raw: "Chilli (Red), Local" }
+- id: fruit.mango-carabao
+  rows:
+    - { section: "FRUITS", raw: "Mango (Carabao)" }
+- id: fruit.banana-lakatan
+  rows:
+    - { section: "FRUITS", raw: "Banana (Lakatan)" }
+- id: fruit.banana-latundan
+  rows:
+    - { section: "FRUITS", raw: "Banana (Latundan)" }
+- id: fruit.banana-saba
+  rows:
+    - { section: "FRUITS", raw: "Banana (Saba)" }
+- id: fruit.calamansi
+  rows:
+    - { section: "FRUITS", raw: "Calamansi" }
+- id: fruit.papaya
+  rows:
+    - { section: "FRUITS", raw: "Papaya" }
+- id: fruit.avocado
+  rows:
+    - { section: "FRUITS", raw: "Avocado" }
+- id: fruit.melon
+  rows:
+    - { section: "FRUITS", raw: "Melon" }
+- id: fruit.watermelon
+  rows:
+    - { section: "FRUITS", raw: "Watermelon" }
+- id: fruit.pomelo
+  rows:
+    - { section: "FRUITS", raw: "Pomelo" }
+- id: other.sugar-refined
+  rows:
+    - { section: "OTHER BASIC COMMODITIES", raw: "Sugar (Refined)" }
+- id: other.sugar-washed
+  rows:
+    - { section: "OTHER BASIC COMMODITIES", raw: "Sugar (Washed)" }
+- id: other.sugar-brown
+  rows:
+    - { section: "OTHER BASIC COMMODITIES", raw: "Sugar (Brown)" }
+- id: other.oil-palm-350ml
+  rows:
+    - { section: "OTHER BASIC COMMODITIES", raw: "Cooking Oil (Palm)", occurrence: 1 }
+- id: other.mungbean
+  rows:
+    - { section: "LEGUMES", raw: "Mungbean" }
+- id: other.corn-white
+  rows:
+    - { section: "CORN", raw: "Corn (White)" }
+    - { section: "CORN PRODUCTS", raw: "Corn (White)" }
+- id: other.corn-yellow
+  rows:
+    - { section: "CORN", raw: "Corn (Yellow)" }
+    - { section: "CORN PRODUCTS", raw: "Corn (Yellow)" }
+- id: other.corn-grits-white
+  rows:
+    - { section: "CORN", raw: "Corn Grits (White, Food Grade)" }
+    - { section: "CORN PRODUCTS", raw: "Corn Grits (White, Food Grade)" }
+- id: other.corn-grits-yellow
+  rows:
+    - { section: "CORN", raw: "Corn Grits (Yellow, Food Grade)" }
+    - { section: "CORN PRODUCTS", raw: "Corn Grits (Yellow, Food Grade)" }
+- id: other.corn-grits-feed
+  rows:
+    - { section: "CORN", raw: "Corn Grits (Feed Grade)" }
+    - { section: "CORN PRODUCTS", raw: "Corn Grits (Feed Grade)" }
+- id: other.corn-cracked-feed
+  rows:
+    - { section: "CORN", raw: "Corn Cracked (Yellow, Feed Grade)" }
+    - { section: "CORN PRODUCTS", raw: "Corn Cracked (Yellow, Feed Grade)" }

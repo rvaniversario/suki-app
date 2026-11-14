@@ -1,9 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { useLatest, useRegions, type Async } from '../lib/data';
+import { useLatest, useMarketPrices, useMarkets, useRegions, type Async } from '../lib/data';
 import { computePlan, type Plan, type PlanOverrides } from '../lib/plan';
 import { loadOverrides, saveOverrides } from '../lib/planStore';
 import { loadSettings, saveSettings, SETTINGS_KEY, type Settings } from '../lib/settings';
-import type { Latest, LatestItem, Region } from '../lib/types';
+import type { Latest, LatestItem, MarketIndex, MarketInfo, MarketPrices, Region } from '../lib/types';
 
 interface AppState {
   settings: Settings;
@@ -14,6 +14,12 @@ interface AppState {
   regions: Async<Region[]>;
   region: Region | null;
   latest: Async<Latest>;
+  /** Markets of the current region (null when the region has none). */
+  markets: Async<MarketIndex>;
+  /** "My market" in the current region, if chosen. */
+  market: MarketInfo | null;
+  marketPrices: Async<MarketPrices>;
+  setMarket: (code: string | null) => void;
   tracked: Set<string>;
   plan: Plan | null;
   overrides: PlanOverrides;
@@ -25,6 +31,11 @@ const Ctx = createContext<AppState | null>(null);
 
 export function featuredIds(items: LatestItem[]): string[] {
   return items.filter((i) => i.featured).map((i) => i.id);
+}
+
+/** Tracked by default: every good the region reports. */
+export function defaultTrackedIds(items: LatestItem[]): string[] {
+  return items.map((i) => i.id);
 }
 
 export function AppStateProvider({ children, initial }: { children: ReactNode; initial?: Settings }) {
@@ -58,9 +69,23 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
     [regions.data, settings.region],
   );
   const latest = useLatest(region?.id ?? null);
+  const markets = useMarkets(region?.markets ? region.id : null);
+  const marketCode = region ? (settings.markets[region.id] ?? null) : null;
+  const market = useMemo(() => markets.data?.markets.find((m) => m.code === marketCode) ?? null, [markets.data, marketCode]);
+  const marketPrices = useMarketPrices(region?.id ?? null, market?.code ?? null);
+  const setMarket = useCallback(
+    (code: string | null) => {
+      if (!region) return;
+      const next = { ...settings.markets };
+      if (code) next[region.id] = code;
+      else delete next[region.id];
+      update({ markets: next });
+    },
+    [region, settings.markets, update],
+  );
 
   const tracked = useMemo(
-    () => new Set(settings.trackedIds ?? featuredIds(latest.data?.items ?? [])),
+    () => new Set(settings.trackedIds ?? defaultTrackedIds(latest.data?.items ?? [])),
     [settings.trackedIds, latest.data],
   );
 
@@ -89,6 +114,10 @@ export function AppStateProvider({ children, initial }: { children: ReactNode; i
     regions,
     region,
     latest,
+    markets,
+    market,
+    marketPrices,
+    setMarket,
     tracked,
     plan,
     overrides,

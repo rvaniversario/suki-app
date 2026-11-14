@@ -9,6 +9,8 @@ export type Language = 'en' | 'fil';
 export interface Settings {
   v: number;
   region: string | null;
+  /** "My market" per region: region id -> market code. */
+  markets: Record<string, string>;
   usualKg: Record<Category, number>;
   /** Weekly budget in pesos; null means no limit. */
   budget: number | null;
@@ -27,6 +29,7 @@ export function defaultSettings(): Settings {
   return {
     v: SETTINGS_VERSION,
     region: null,
+    markets: {},
     usualKg: { ...DEFAULT_USUAL_KG },
     budget: null,
     trackedIds: null,
@@ -48,6 +51,7 @@ export function normalize(raw: unknown): Settings {
   return {
     v: SETTINGS_VERSION,
     region: typeof r.region === 'string' ? r.region : null,
+    markets: stringMap(r.markets),
     usualKg: {
       fish: num(kg.fish, d.usualKg.fish),
       pork: num(kg.pork, d.usualKg.pork),
@@ -61,6 +65,11 @@ export function normalize(raw: unknown): Settings {
     alerts: r.alerts === true,
     updatedAt: typeof r.updatedAt === 'string' ? r.updatedAt : null,
   };
+}
+
+function stringMap(x: unknown): Record<string, string> {
+  if (!x || typeof x !== 'object' || Array.isArray(x)) return {};
+  return Object.fromEntries(Object.entries(x as Record<string, unknown>).filter((e): e is [string, string] => typeof e[1] === 'string'));
 }
 
 export function loadSettings(): Settings {
@@ -80,7 +89,7 @@ export function saveSettings(s: Settings): void {
 }
 
 /** Fields that sync between devices (alerts and region-specific push state are per device but harmless to sync). */
-const SHOPPING_FIELDS = ['usualKg', 'budget', 'trackedIds', 'theme', 'language', 'alerts'] as const;
+const SHOPPING_FIELDS = ['markets', 'usualKg', 'budget', 'trackedIds', 'theme', 'language', 'alerts'] as const;
 
 /** True when nothing but the region has been changed from the defaults. */
 export function isDefault(s: Settings): boolean {

@@ -7,11 +7,11 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from . import alerts, build, catalog as catalog_mod, config, parse_mimaropa, parse_ncr
+from . import alerts, build, catalog as catalog_mod, config, db, insights, markets, parse_mimaropa, parse_ncr
 from .http import NotFound
 from .model import ParseError
-from .sources import RemoteFile, drive, ncr
-from .store import History, Manifest
+from .sources import RemoteFile, drive, ncr, powerbi
+from .store import History, Manifest, read_json
 
 log = logging.getLogger(__name__)
 
@@ -22,6 +22,10 @@ PARSERS = {"mimaropa": parse_mimaropa, "ncr": parse_ncr}
 LOOKBACK_DAYS = 10
 # A date with no file is retried until it is this old, then recorded as not published.
 GIVE_UP_AFTER_DAYS = 7
+# Bantay Presyo prices are often entered 1-3 weeks late, so each run re-reads this many days.
+POWERBI_LOOKBACK_DAYS = 21
+# Backfill queries cover this many days each.
+POWERBI_CHUNK_DAYS = 14
 
 MANILA = timezone(timedelta(hours=8))
 
@@ -43,7 +47,7 @@ def cached_path(f: RemoteFile) -> Path:
     return config.PDF_CACHE_DIR / f.region / f.name
 
 
-def process_region(region: str, start: date, end: date, send: bool) -> RegionResult:
+def process_region(region: str, start: date, end: date, send: bool, with_markets: bool = True) -> RegionResult:
     res = RegionResult(region)
     src, parser = SOURCES[region], PARSERS[region]
     cat = catalog_mod.load(region)
@@ -101,6 +105,8 @@ def process_region(region: str, start: date, end: date, send: bool) -> RegionRes
     history.save()
     latest = build.write_latest(region, cat, history) if res.new_reports or not (config.DATA_DIR / region / "latest.json").exists() else None
     manifest.save()
+    if with_markets:
+        update_markets(region, end - timedelta(days=POWERBI_LOOKBACK_DAYS), end, history, regional=False)
 
     last_new = date.fromisoformat(manifest.last_new_file_on) if manifest.last_new_file_on else None
     if last_new is None or (today - last_new).days >= config.MAX_DAYS_WITHOUT_NEW_FILE:
@@ -111,6 +117,64 @@ def process_region(region: str, start: date, end: date, send: bool) -> RegionRes
     if send and latest and after and (before is None or after > before):
         _send_alerts(region, cat, history, latest, after)
     return res
+
+
+def update_markets(region: str, start: date, end: date, history: History, regional: bool) -> markets.MarketResult | None:
+    """Per-market prices. A failure here is logged as "source unavailable" and never fails the run."""
+    label = config.REGION_BY_ID[region]["powerbi"]
+    try:
+        res = markets.update(region, label, start, end, history, regional)
+    except powerbi.SourceUnavailable as e:
+        log.warning("%s: Bantay Presyo source unavailable: %s", region, e)
+        return None
+    log.info(
+        "%s: Bantay Presyo %s..%s: %d rows, %d markets, %d rejected",
+        region, start, end, res.rows, res.markets, len(res.rejected),
+    )
+    return res
+
+
+def process_powerbi_region(region: str, start: date, end: date, send: bool) -> RegionResult:
+    """A region without a PDF report: the regional series is the median across its markets."""
+    res = RegionResult(region)
+    cat = catalog_mod.load_shared()
+    history = History(region).load()
+    before = build.latest_report_date(history, cat)
+    chunk_start = start
+    while chunk_start <= end:
+        chunk_end = min(end, chunk_start + timedelta(days=POWERBI_CHUNK_DAYS - 1))
+        m = update_markets(region, chunk_start, chunk_end, history, regional=True)
+        if m is None:
+            res.failures.append(f"Bantay Presyo unavailable for {chunk_start}..{chunk_end}")
+        else:
+            res.warnings += m.rejected
+        chunk_start = chunk_end + timedelta(days=1)
+    changed_items = set(history.dirty)
+    changed = bool(changed_items)
+    history.save()
+    exists = (config.DATA_DIR / region / "latest.json").exists()
+    latest = build.write_latest(region, cat, history, skip_unreported=True) if changed or not exists else None
+    # AI notes (optional): only when this region's "as of" moved since the last note.
+    insights.update(
+        region,
+        config.REGION_BY_ID[region]["name"],
+        latest or read_json(config.DATA_DIR / region / "latest.json"),
+        history,
+    )
+    # Permanent copy in Supabase (optional): the points this run touched, markets and the AI note.
+    db.sync_region(region, history, changed_items, since=start - timedelta(days=markets.REGIONAL_WINDOW_DAYS))
+    after = build.latest_report_date(history, cat)
+    if after and (before is None or after > before):
+        res.new_reports.append(after)
+        if send and latest:
+            _send_alerts(region, cat, history, latest, after)
+    return res
+
+
+def _process(region: str, start: date, end: date, send: bool) -> RegionResult:
+    if config.REGION_BY_ID[region].get("pdf"):
+        return process_region(region, start, end, send)
+    return process_powerbi_region(region, start, end, send)
 
 
 def _send_alerts(region, cat, history, latest, as_of: date) -> None:
@@ -142,7 +206,8 @@ def run(regions: list[str]) -> int:
     start = end - timedelta(days=LOOKBACK_DAYS)
     code = 0
     for region in regions:
-        res = process_region(region, start, end, send=True)
+        pdf = config.REGION_BY_ID[region].get("pdf")
+        res = _process(region, start if pdf else end - timedelta(days=POWERBI_LOOKBACK_DAYS), end, send=True)
         log.info("%s: %d new report(s) %s, %d failure(s)", region, len(res.new_reports), [d.isoformat() for d in res.new_reports], len(res.failures))
         if res.unhealthy:
             code = 1
@@ -153,7 +218,7 @@ def backfill(regions: list[str], start: date, end: date | None) -> int:
     build.write_regions()
     end = end or today_manila()
     for region in regions:
-        res = process_region(region, start, end, send=False)
+        res = _process(region, start, end, send=False)
         log.info("%s: backfilled %d report(s), %d failure(s), %d warning(s)", region, len(res.new_reports), len(res.failures), len(res.warnings))
         for f in res.failures:
             log.info("  failure: %s", f)
@@ -166,6 +231,9 @@ def rebuild(regions: list[str]) -> int:
 
     build.write_regions()
     for region in regions:
+        if not config.REGION_BY_ID[region].get("pdf"):
+            log.info("%s: no cached reports (Bantay Presyo region); use backfill to rebuild it", region)
+            continue
         hist_dir = config.DATA_DIR / region / "history"
         if hist_dir.exists():
             shutil.rmtree(hist_dir)
@@ -189,7 +257,7 @@ def rebuild(regions: list[str]) -> int:
         if not dates:
             continue
         # process_region skips nothing new except files already marked; all cached files are reused
-        res = process_region(region, min(dates), max(dates), send=False)
+        res = process_region(region, min(dates), max(dates), send=False, with_markets=False)
         log.info("%s: rebuilt from %d report(s), %d failure(s)", region, len(res.new_reports), len(res.failures))
     return 0
 

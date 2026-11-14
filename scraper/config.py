@@ -47,13 +47,36 @@ VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
 VAPID_SUBJECT = os.environ.get("VAPID_SUBJECT", "")
 APP_URL = os.environ.get("SUKI_APP_URL", "/")
 
+# Every region. `powerbi` is the REGION label in the Bantay Presyo dashboard. All regions use the
+# same method: the regional price is the median across the region's markets. The PDF scrapers
+# (MIMAROPA Drive, NCR da.gov.ph) are kept but not run; set `pdf: True` on a region to use one.
+_BP = "DA Bantay Presyo"
 REGIONS = [
-    {"id": "mimaropa", "name": "MIMAROPA", "status": "daily", "source": "DA MIMAROPA AMAD", "hasRange": True},
-    {"id": "ncr", "name": "NCR (Metro Manila)", "status": "daily", "source": "DA Bantay Presyo", "hasRange": False},
-    {"id": "car", "name": "CAR (Cordillera)", "status": "unavailable"},
-    {"id": "ilocos", "name": "Ilocos Region", "status": "unavailable"},
-    {"id": "cagayan-valley", "name": "Cagayan Valley", "status": "unavailable"},
-    {"id": "central-luzon", "name": "Central Luzon", "status": "unavailable"},
-    {"id": "calabarzon", "name": "CALABARZON", "status": "unavailable"},
+    {"id": "ncr", "name": "NCR (Metro Manila)", "powerbi": "NCR (NATIONAL CAPITAL REGION)"},
+    {"id": "car", "name": "CAR (Cordillera)", "powerbi": "CAR (CORDILLERA ADMINISTRATIVE REGION)"},
+    {"id": "ilocos", "name": "Ilocos Region", "powerbi": "REGION I (ILOCOS REGION)"},
+    {"id": "cagayan-valley", "name": "Cagayan Valley", "powerbi": "REGION II (CAGAYAN VALLEY)"},
+    {"id": "central-luzon", "name": "Central Luzon", "powerbi": "REGION III (CENTRAL LUZON)"},
+    {"id": "calabarzon", "name": "CALABARZON", "powerbi": "REGION IV-A (CALABARZON)"},
+    {"id": "mimaropa", "name": "MIMAROPA", "powerbi": "REGION IV-B (MIMAROPA)"},
+    {"id": "bicol", "name": "Bicol Region", "powerbi": "REGION V (BICOL REGION)"},
+    {"id": "western-visayas", "name": "Western Visayas", "powerbi": "REGION VI (WESTERN VISAYAS)"},
+    {"id": "central-visayas", "name": "Central Visayas", "powerbi": "REGION VII (CENTRAL VISAYAS)"},
+    {"id": "eastern-visayas", "name": "Eastern Visayas", "powerbi": "REGION VIII (EASTERN VISAYAS)"},
+    {"id": "zamboanga", "name": "Zamboanga Peninsula", "powerbi": "REGION IX (ZAMBOANGA PENINSULA)"},
+    {"id": "northern-mindanao", "name": "Northern Mindanao", "powerbi": "REGION X (NORTHERN MINDANAO)"},
+    {"id": "davao", "name": "Davao Region", "powerbi": "REGION XI (DAVAO REGION)"},
+    {"id": "soccsksargen", "name": "SOCCSKSARGEN", "powerbi": "REGION XII (SOCCSKSARGEN)"},
+    {"id": "caraga", "name": "Caraga", "powerbi": "REGION XIII (Caraga)"},
+    {"id": "barmm", "name": "BARMM", "powerbi": "BARMM (Bangsamoro Autonomous Region of Muslim Mindanao)"},
 ]
+for _r in REGIONS:
+    if not _r.get("pdf"):
+        _r.update(status="daily", source=f"{_BP} (median of markets)", hasRange=True, pdf=False)
+    _r["markets"] = True
+REGION_BY_ID = {r["id"]: r for r in REGIONS}
 ACTIVE_REGIONS = [r["id"] for r in REGIONS if r["status"] == "daily"]
+
+# --- Bantay Presyo Power BI (per-market prices, all regions) ------------------------
+# Resource key from the public report URL (SPEC section 4.3). The model id is looked up at run time.
+POWERBI_RESOURCE_KEY = "f5edb48b-b77c-4154-ae2b-9a2c1a783c37"

@@ -9,8 +9,8 @@ const WIDTHS = [
 async function chooseRegion(page: Page) {
   const dialog = page.getByRole('dialog', { name: 'Choose your region' });
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('radio', { name: /MIMAROPA/ }).check();
-  await dialog.getByRole('button', { name: 'Use MIMAROPA' }).click();
+  await dialog.getByRole('radio', { name: /CALABARZON/ }).check();
+  await dialog.getByRole('button', { name: 'Use CALABARZON' }).click();
   await expect(dialog).toBeHidden();
 }
 
@@ -23,7 +23,7 @@ for (const { name, width, height } of WIDTHS) {
     await chooseRegion(page);
 
     await expect(page.getByRole('heading', { name: 'Best buys today' })).toBeVisible();
-    await expect(page.getByText(/As of .* · DA MIMAROPA AMAD/)).toBeVisible();
+    await expect(page.getByText(/As of .* · DA Bantay Presyo/)).toBeVisible();
     await expect(page.getByText(/below usual|above usual|Same as usual/).first()).toBeVisible();
 
     // The page never scrolls sideways.

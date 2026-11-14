@@ -8,6 +8,7 @@ export default defineConfig({
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
+    env: { SUKI_DATA_DIR: 'e2e/fixtures/data' },
     url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

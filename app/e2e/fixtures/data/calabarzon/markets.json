@@ -1,0 +1,31 @@
+{
+  "region": "calabarzon",
+  "source": "DA Bantay Presyo",
+  "freshDays": 14,
+  "markets": [
+    {
+      "code": "343",
+      "name": "Antipolo City Public Market",
+      "lat": 14.5841,
+      "lng": 121.17391,
+      "latest": "2026-10-27",
+      "items": 62
+    },
+    {
+      "code": "119",
+      "name": "Binan City Public Market",
+      "lat": 14.42278,
+      "lng": 121.44281,
+      "latest": "2026-11-14",
+      "items": 84
+    },
+    {
+      "code": "342",
+      "name": "City Mall Of Antipolo",
+      "lat": 14.60072,
+      "lng": 121.14687,
+      "latest": "2026-11-14",
+      "items": 83
+    }
+  ]
+}

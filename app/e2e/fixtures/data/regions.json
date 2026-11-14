@@ -1,0 +1,138 @@
+[
+  {
+    "id": "ncr",
+    "name": "NCR (Metro Manila)",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "car",
+    "name": "CAR (Cordillera)",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "ilocos",
+    "name": "Ilocos Region",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "cagayan-valley",
+    "name": "Cagayan Valley",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "central-luzon",
+    "name": "Central Luzon",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "calabarzon",
+    "name": "CALABARZON",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "mimaropa",
+    "name": "MIMAROPA",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "bicol",
+    "name": "Bicol Region",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "western-visayas",
+    "name": "Western Visayas",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "central-visayas",
+    "name": "Central Visayas",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "eastern-visayas",
+    "name": "Eastern Visayas",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "zamboanga",
+    "name": "Zamboanga Peninsula",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "northern-mindanao",
+    "name": "Northern Mindanao",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "davao",
+    "name": "Davao Region",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "soccsksargen",
+    "name": "SOCCSKSARGEN",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "caraga",
+    "name": "Caraga",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  },
+  {
+    "id": "barmm",
+    "name": "BARMM",
+    "status": "daily",
+    "source": "DA Bantay Presyo (median of markets)",
+    "hasRange": true,
+    "markets": true
+  }
+]

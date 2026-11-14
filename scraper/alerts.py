@@ -79,7 +79,9 @@ class SupabaseSubscriptions:
 
     def __init__(self, url: str, key: str):
         self.base = url.rstrip("/") + "/rest/v1/push_subscriptions"
-        self.headers = {"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+        from .db import auth_headers
+
+        self.headers = auth_headers(key)
 
     def list(self, region: str) -> list[dict]:
         out, offset = [], 0

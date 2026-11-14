@@ -3,13 +3,13 @@ import type { AnyCategory, LatestItem } from './types';
 export type Filter = 'all' | AnyCategory;
 
 /**
- * Today's list: tracked kg goods with a price today. Ranked ascending by score
+ * Today's list: tracked goods with a price today (any unit; the score is a percentage). Ranked ascending by score
  * (most below usual first), never by raw price. Items without a baseline go in a
  * separate unranked group.
  */
 export function rankItems(items: LatestItem[], tracked: Set<string>, filter: Filter = 'all') {
   const visible = items.filter(
-    (i) => tracked.has(i.id) && i.price !== null && i.unit === 'kg' && (filter === 'all' || i.category === filter),
+    (i) => tracked.has(i.id) && i.price !== null && (filter === 'all' || i.category === filter),
   );
   const ranked = visible
     .filter((i) => i.pctVsBaseline !== null)

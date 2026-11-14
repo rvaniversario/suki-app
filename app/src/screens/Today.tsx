@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { APP_NAME } from '../config';
 import { useI18n } from '../i18n';
 import { ChevronDown, SettingsIcon } from '../components/Icons';
+import { MarketBar, MarketPriceLine, PriceDate, unitSuffix, useMarketPoint } from '../components/MarketPrice';
+import { InsightsCard } from '../components/InsightsCard';
 import { LoadState, ReportNotices } from '../components/Notices';
 import { PlanSummary } from '../components/PlanSummary';
 import { PriceChart } from '../components/PriceChart';
@@ -10,11 +12,10 @@ import { StatusChip } from '../components/StatusChip';
 import { useBreakpoint, useHistory } from '../lib/data';
 import { kg, peso } from '../lib/format';
 import { rankItems, type Filter } from '../lib/ranking';
-import { CATEGORIES, type LatestItem } from '../lib/types';
+import { ALL_CATEGORIES, type LatestItem } from '../lib/types';
 import { useApp } from '../state/AppState';
 import { useUI } from '../state/UI';
 
-const FILTERS: Filter[] = ['all', ...CATEGORIES];
 
 export function RegionPill() {
   const { t } = useI18n();
@@ -29,11 +30,18 @@ export function RegionPill() {
   );
 }
 
-function FilterChips({ value, onChange }: { value: Filter; onChange: (f: Filter) => void }) {
+/** "All" plus every category that has a tracked good with a price today. */
+function filtersFor(items: LatestItem[], tracked: Set<string>): Filter[] {
+  const present = new Set(items.filter((i) => tracked.has(i.id) && i.price !== null).map((i) => i.category));
+  return ['all', ...ALL_CATEGORIES.filter((c) => present.has(c))];
+}
+
+function FilterChips({ filters, value, onChange }: { filters: Filter[]; value: Filter; onChange: (f: Filter) => void }) {
   const { t } = useI18n();
+  if (filters.length <= 2) return null;
   return (
     <div className="chips" role="group" aria-label={t('today.filterLabel')}>
-      {FILTERS.map((f) => (
+      {filters.map((f) => (
         <button key={f} type="button" className="chip" aria-pressed={value === f} onClick={() => onChange(f)}>
           {t(`categories.${f}`)}
         </button>
@@ -47,7 +55,7 @@ function PriceText({ item }: { item: LatestItem }) {
   return (
     <span className="price">
       {peso(item.price, lang)}
-      <small> {t('today.perKg')}</small>
+      <small> {unitSuffix(t, item.unit)}</small>
     </span>
   );
 }
@@ -62,6 +70,8 @@ function RankList({ items, offset = 0 }: { items: LatestItem[]; offset?: number 
             <span className="rank-name">
               <strong>{item.name}</strong>
               {item.detail && <span>{item.detail}</span>}
+              <PriceDate item={item} />
+              <MarketPriceLine item={item} />
             </span>
             <span className="rank-price">
               <PriceText item={item} />
@@ -90,13 +100,15 @@ function CardGrid({ items }: { items: LatestItem[] }) {
             <span style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <span className="name">{item.name}</span>
               {item.detail && <span className="detail">{item.detail}</span>}
+              <PriceDate item={item} />
+              <MarketPriceLine item={item} />
             </span>
             <span className="row" style={{ alignItems: 'baseline' }}>
               <span className="big-price">
                 {peso(item.price, lang)}
                 <small className="muted" style={{ fontFamily: 'var(--font-text)', fontSize: 13, fontWeight: 400 }}>
                   {' '}
-                  {t('today.perKg')}
+                  {unitSuffix(t, item.unit)}
                 </small>
               </span>
               {item.baseline !== null && <span className="detail">{t('today.usual', { price: peso(item.baseline, lang) })}</span>}
@@ -110,7 +122,7 @@ function CardGrid({ items }: { items: LatestItem[] }) {
 
 function RankTable({ items, selected, onSelect }: { items: LatestItem[]; selected: string | null; onSelect: (id: string) => void }) {
   const { t, lang } = useI18n();
-  const { plan } = useApp();
+  const { plan, market } = useApp();
   const weekQty = (id: string) => {
     const row = plan?.rows.find((r) => r.item.id === id);
     return row ? kg(row.kg) : '—';
@@ -128,6 +140,11 @@ function RankTable({ items, selected, onSelect }: { items: LatestItem[]; selecte
             <th scope="col" className="r">
               {t('today.colUsual')}
             </th>
+            {market && (
+              <th scope="col" className="r">
+                {t('market.colMarket')}
+              </th>
+            )}
             <th scope="col">{t('today.colAgainst')}</th>
             <th scope="col" className="r">
               {t('today.colWeek')}
@@ -144,12 +161,17 @@ function RankTable({ items, selected, onSelect }: { items: LatestItem[]; selecte
                 <button type="button" className="item-button" onClick={() => onSelect(item.id)} aria-pressed={selected === item.id}>
                   <strong>{item.name}</strong>
                   {item.detail && <span className="detail">{item.detail}</span>}
+                  <PriceDate item={item} />
                 </button>
               </td>
-              <td className="r price">{peso(item.price, lang)}</td>
+              <td className="r price">
+                {peso(item.price, lang)}
+                {item.unit !== 'kg' && <small className="muted"> {unitSuffix(t, item.unit)}</small>}
+              </td>
               <td className="r muted" style={{ fontSize: 14 }}>
                 {peso(item.baseline, lang)}
               </td>
+              {market && <MarketCell id={item.id} />}
               <td>
                 <StatusChip item={item} />
               </td>
@@ -161,6 +183,16 @@ function RankTable({ items, selected, onSelect }: { items: LatestItem[]; selecte
         </tbody>
       </table>
     </div>
+  );
+}
+
+function MarketCell({ id }: { id: string }) {
+  const { lang } = useI18n();
+  const point = useMarketPoint(id);
+  return (
+    <td className="r" style={{ fontSize: 14 }}>
+      {peso(point?.p ?? null, lang)}
+    </td>
   );
 }
 
@@ -188,7 +220,9 @@ export function Today() {
   const { t } = useI18n();
   const bp = useBreakpoint();
   const { latest, tracked, region, plan, regions } = useApp();
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filterChoice, setFilter] = useState<Filter>('all');
+  const filters = useMemo(() => filtersFor(latest.data?.items ?? [], tracked), [latest.data, tracked]);
+  const filter = filters.includes(filterChoice) ? filterChoice : 'all';
   const [selected, setSelected] = useState<string | null>(null);
 
   const { ranked, unranked } = useMemo(
@@ -210,7 +244,9 @@ export function Today() {
   const body = latest.data ? (
     <>
       <ReportNotices asOf={latest.data.asOf} source={region?.source} />
-      <FilterChips value={filter} onChange={setFilter} />
+      <MarketBar />
+      <InsightsCard />
+      <FilterChips filters={filters} value={filter} onChange={setFilter} />
       {bp === 'tablet' && plan && plan.rows.length > 0 && <PlanSummary plan={plan} variant="strip" />}
       {empty && <p className="empty">{emptyText}</p>}
       {bp === 'phone' && (
