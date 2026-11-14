@@ -1,0 +1,81 @@
+name: Update prices
+
+# Daily price update for an app hosted apart from its data (e.g. on Vercel).
+#   1. restore the history from Supabase (or, if it is empty, fetch a year from Bantay Presyo)
+#   2. run the daily update: Bantay Presyo, AI notes, save changes to Supabase, price drop alerts
+#   3. publish the changed JSON files to the public Supabase Storage bucket the app reads
+#      (VITE_DATA_URL = <SUPABASE_URL>/storage/v1/object/public/prices)
+# Nothing is committed to the repository. A Docker deployment does the same on its own.
+#
+# Repository secrets: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (secret key), and optionally
+# GEMINI_API_KEY / OPENAI_API_KEY (AI notes), VAPID_PRIVATE_KEY (alerts).
+# Repository variables (optional): AI_PROVIDER, GEMINI_MODEL, OPENAI_MODEL, AI_WEB_SEARCH,
+# AI_DAILY_REQUESTS, AI_DAILY_TOKENS, VAPID_SUBJECT, APP_URL, SUPABASE_BUCKET.
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 10:00 Asia/Manila
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-prices
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_BUCKET: ${{ vars.SUPABASE_BUCKET || 'prices' }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-4-hydrogen' }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5-mini' }}
+      AI_WEB_SEARCH: ${{ vars.AI_WEB_SEARCH || '1' }}
+      AI_DAILY_REQUESTS: ${{ vars.AI_DAILY_REQUESTS || '40' }}
+      AI_DAILY_TOKENS: ${{ vars.AI_DAILY_TOKENS || '600000' }}
+      VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+      VAPID_SUBJECT: ${{ vars.VAPID_SUBJECT }}
+      SUKI_APP_URL: ${{ vars.APP_URL || '/' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - run: pip install -r scraper/requirements.txt
+
+      - name: Check settings
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::error::Set the SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY repository secrets."
+            exit 1
+          fi
+
+      - name: Restore history from Supabase
+        run: |
+          set +e
+          python -m scraper restore --region all
+          code=$?
+          set -e
+          if [ "$code" -eq 2 ]; then
+            echo "Supabase is empty: fetching a year from Bantay Presyo"
+            python -m scraper backfill --region all --days 365
+          elif [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+
+      - name: Daily update
+        run: python -m scraper run --region all
+
+      - name: Publish to Supabase Storage
+        run: python -m scraper publish

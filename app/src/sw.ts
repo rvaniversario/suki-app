@@ -21,8 +21,11 @@ const base = new URL(self.registration.scope).pathname;
 registerRoute(new NavigationRoute(createHandlerBoundToURL(`${base}index.html`), { denylist: [/\/data\//] }));
 
 // Price data: show the last fetched prices instantly (and offline), refresh in the background.
+// Served by this site under /data, or from VITE_DATA_URL (e.g. Supabase Storage) when set.
+const dataUrl = ((import.meta.env.VITE_DATA_URL as string | undefined) ?? '').trim().replace(/\/+$/, '');
 registerRoute(
-  ({ url }) => url.origin === self.location.origin && url.pathname.startsWith(`${base}data/`),
+  ({ url }) =>
+    dataUrl ? url.href.startsWith(`${dataUrl}/`) : url.origin === self.location.origin && url.pathname.startsWith(`${base}data/`),
   new StaleWhileRevalidate({
     cacheName: 'price-data',
     plugins: [new ExpirationPlugin({ maxEntries: 400, maxAgeSeconds: 120 * 24 * 3600 })],
