@@ -25,6 +25,11 @@ export function kg(x: number): string {
   return `${whole ? whole : ''}${f ?? ''} kg`;
 }
 
+/** Ingredient amount: "½ kg" for kilos, "6 pc" otherwise. */
+export function kgOrUnit(qty: number, unit: string): string {
+  return unit === 'kg' ? kg(qty) : `${Math.round(qty * 100) / 100} ${unit}`;
+}
+
 export function dateLong(iso: string, lang: Language = 'en'): string {
   return new Intl.DateTimeFormat(LOCALE[lang], { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(
     new Date(`${iso}T00:00:00Z`),

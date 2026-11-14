@@ -31,17 +31,17 @@ describe('ranking', () => {
     mk('pork', 'pork', 320, -4),
     mk('nohist', 'fish', 100, null),
     mk('noprice', 'fish', 100, -20, { price: null }),
-    mk('egg', 'other', 9, -10, { unit: 'pc' }),
+    mk('egg', 'eggs', 9, -10, { unit: 'pc' }),
   ];
   const all = new Set(items.map((i) => i.id));
 
   it('ranks by score, most below usual first, not by price', () => {
-    expect(rankItems(items, all).ranked.map((i) => i.id)).toEqual(['fish', 'pork', 'chicken', 'beef']);
+    expect(rankItems(items, all).ranked.map((i) => i.id)).toEqual(['egg', 'fish', 'pork', 'chicken', 'beef']);
   });
-  it('hides items with no price today and non-kg items; puts unscored items apart', () => {
+  it('hides items with no price today, ranks any unit by score, puts unscored items apart', () => {
     const { ranked, unranked } = rankItems(items, all);
     expect(ranked.find((i) => i.id === 'noprice')).toBeUndefined();
-    expect(ranked.find((i) => i.id === 'egg')).toBeUndefined();
+    expect(ranked.find((i) => i.id === 'egg')?.unit).toBe('pc');
     expect(unranked.map((i) => i.id)).toEqual(['nohist']);
   });
   it('filters by category and tracked goods', () => {

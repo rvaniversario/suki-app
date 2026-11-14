@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { useI18n } from '../i18n';
 import { SearchIcon } from '../components/Icons';
 import { LoadState } from '../components/Notices';
+import { PriceDate } from '../components/MarketPrice';
 import { StatusChip } from '../components/StatusChip';
 import { peso } from '../lib/format';
-import type { AnyCategory, LatestItem } from '../lib/types';
+import { ALL_CATEGORIES, type AnyCategory, type LatestItem } from '../lib/types';
 import { useApp } from '../state/AppState';
 
-export const GROUP_ORDER: AnyCategory[] = ['fish', 'pork', 'chicken', 'beef', 'other'];
+export const GROUP_ORDER: readonly AnyCategory[] = ALL_CATEGORIES;
 
 export function groupItems(items: LatestItem[], query: string): [AnyCategory, LatestItem[]][] {
   const q = query.trim().toLowerCase();
@@ -58,6 +59,7 @@ export function History() {
                     <span className="label">
                       {i.name}
                       {i.detail && <small>{i.detail}</small>}
+                      <PriceDate item={i} />
                     </span>
                     <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
                       <span className="price">{peso(i.price, lang)}</span>

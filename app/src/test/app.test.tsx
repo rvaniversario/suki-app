@@ -53,13 +53,13 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('Today', () => {
-  it('ranks tracked goods by how far below usual, not by price', async () => {
+  it('ranks every good by how far below usual, not by price', async () => {
     renderAt('/', settings());
     const list = await screen.findByRole('list');
     const names = within(list)
       .getAllByRole('link')
       .map((a) => a.querySelector('strong')?.textContent);
-    expect(names).toEqual(['Tilapia', 'Pork kasim', 'Whole chicken', 'Beef rump']); // Bangus is not featured
+    expect(names).toEqual(['Tilapia', 'Bangus', 'Pork kasim', 'Whole chicken', 'Beef rump']); // every good is tracked by default
     expect(within(list).getByText('8% below usual')).toBeInTheDocument();
     expect(within(list).getByText('12% above usual')).toBeInTheDocument();
   });
@@ -155,5 +155,121 @@ describe('Settings', () => {
     localStorage.setItem(SETTINGS_KEY, '{{{');
     renderAt('/');
     expect(await screen.findByRole('dialog', { name: 'Choose your region' })).toBeInTheDocument();
+  });
+});
+
+describe('My market', () => {
+  const MARKETS = {
+    region: 'ncr',
+    source: 'DA Bantay Presyo',
+    markets: [
+      { code: '12', name: 'Pasig Mega Market', lat: 14.56, lng: 121.08, latest: today, items: 60 },
+      { code: '13', name: 'Old Market', lat: null, lng: null, latest: '2025-01-02', items: 10 },
+    ],
+  };
+  const PRICES = {
+    code: '12',
+    name: 'Pasig Mega Market',
+    region: 'ncr',
+    latest: today,
+    items: { 'fish.tilapia': { d: today, p: 160 } },
+  };
+
+  beforeEach(() => {
+    const regions = REGIONS.map((r) => (r.id === 'ncr' ? { ...r, markets: true } : r));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        const body = url.endsWith('regions.json')
+          ? regions
+          : url.endsWith('latest.json')
+            ? LATEST
+            : url.endsWith('markets.json')
+              ? MARKETS
+              : url.endsWith('markets/12.json')
+                ? PRICES
+                : { id: 'x', points: [] };
+        return new Response(JSON.stringify(body), { status: 200 });
+      }),
+    );
+  });
+
+  it('chooses a market; markets with old data can be chosen too', async () => {
+    renderAt('/settings', settings());
+    await userEvent.click(await screen.findByRole('button', { name: /No market/ }));
+    const dialog = await screen.findByRole('dialog', { name: 'Choose your market' });
+    expect(within(dialog).getByRole('radio', { name: /Old Market/ })).toBeEnabled();
+    await userEvent.click(within(dialog).getByRole('radio', { name: /Pasig Mega Market/ }));
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Use Pasig Mega Market' }));
+    expect(JSON.parse(localStorage.getItem(SETTINGS_KEY)!).markets).toEqual({ ncr: '12' });
+  });
+
+  it('shows the market price beside the regional one', async () => {
+    renderAt('/item/fish.tilapia', settings({ markets: { ncr: '12' } }));
+    expect(await screen.findByText('₱160.00')).toBeInTheDocument();
+    expect(screen.getByText(/6% above the regional price/)).toBeInTheDocument();
+  });
+
+  it('lists the market prices on Today', async () => {
+    renderAt('/', settings({ markets: { ncr: '12' } }));
+    expect(await screen.findByText('My market: Pasig Mega Market')).toBeInTheDocument();
+    expect(await screen.findByText('Pasig Mega Market: ₱160.00')).toBeInTheDocument();
+  });
+});
+
+describe('AI weekly note', () => {
+  const note = (brief: string) => ({
+    brief,
+    dishes: [
+      {
+        name: 'Sinigang na tilapia',
+        why: 'Tilapia is below usual',
+        ingredients: [{ id: 'fish.tilapia', name: 'Tilapia', qty: 1, unit: 'kg', cost: 150.34 }],
+        cost: 150.34,
+      },
+    ],
+    notes: [],
+  });
+  const INSIGHTS = {
+    region: 'ncr',
+    asOf: today,
+    generatedAt: `${today}T02:00:00Z`,
+    model: 'gpt-5-mini',
+    en: note('Tilapia is a good buy.'),
+    fil: note('Sulit ang tilapia.'),
+    why: { goods: ['beef.rump'], en: 'Beef rose on lower supply.', fil: 'Tumaas ang baka.', sources: [{ title: 'PNA report', url: 'https://www.pna.gov.ph/a/1' }] },
+  };
+
+  function withInsights(body: unknown) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        const res = url.endsWith('regions.json') ? REGIONS : url.endsWith('latest.json') ? LATEST : url.endsWith('insights.json') ? body : { id: 'x', points: [] };
+        return new Response(JSON.stringify(res), { status: 200 });
+      }),
+    );
+  }
+
+  it('shows the note in the chosen language, marked as AI-written', async () => {
+    withInsights(INSIGHTS);
+    renderAt('/', settings({ language: 'fil' }));
+    expect(await screen.findByText('Sulit ang tilapia.')).toBeInTheDocument();
+    expect(screen.getByText(/Isinulat ng AI/)).toBeInTheDocument();
+    expect(screen.getByText('mga ₱150')).toBeInTheDocument();
+  });
+
+  it('links the sources behind "why prices moved"', async () => {
+    withInsights(INSIGHTS);
+    renderAt('/', settings());
+    expect(await screen.findByText('Beef rose on lower supply.')).toBeInTheDocument();
+    const link = screen.getByRole('link', { name: 'PNA report' });
+    expect(link).toHaveAttribute('href', 'https://www.pna.gov.ph/a/1');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('shows nothing when the region has no note', async () => {
+    renderAt('/', settings());
+    await screen.findByText('Tilapia');
+    expect(screen.queryByRole('heading', { name: 'This week' })).not.toBeInTheDocument();
   });
 });

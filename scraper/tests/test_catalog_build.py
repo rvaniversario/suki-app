@@ -53,8 +53,43 @@ def test_ncr_both_layouts_map_to_same_items():
 
 def test_uncatalogued_rows_get_auto_ids():
     cat = catalog.load("mimaropa")
-    row = Row(section="SPICES", raw="Garlic, Imported", occurrence=1, unit="kg", price=150.43)
-    assert cat.item_id(row) == ("auto.spices.garlic-imported", None)
+    row = Row(section="SPICES", raw="Tiger Chillies, Imported", occurrence=1, unit="kg", price=150.43)
+    assert cat.item_id(row) == ("auto.spices.tiger-chillies-imported", None)
+
+
+@pytest.mark.parametrize("region", ["mimaropa", "ncr"])
+def test_other_goods_inherit_from_shared_catalog(region):
+    cat = catalog.load(region)
+    shared = catalog.load_shared()
+    for item_id in ("rice.local-well-milled", "veg.tomato", "spice.red-onion", "fruit.calamansi", "eggs.white-medium"):
+        e, s = cat.by_id[item_id], shared.by_id[item_id]
+        assert (e.name, e.category, e.unit) == (s.name, s.category, s.unit)
+    assert cat.by_id["eggs.white-medium"].unit == "pc"
+    # Own entries keep their own flags.
+    assert cat.by_id["fish.tilapia"].name == "Tilapia"
+
+
+def test_mimaropa_other_goods_from_fixture():
+    cat = catalog.load("mimaropa")
+    ids = ids_for(parse_mimaropa.parse(FIXTURES / "November 10, 2026.pdf"), cat)
+    for item in ("rice.local-well-milled", "veg.tomato", "spice.garlic-imported", "fruit.calamansi", "eggs.white-medium", "other.sugar-refined"):
+        assert item in ids, item
+
+
+def test_ncr_other_goods_from_both_layouts():
+    cat = catalog.load("ncr")
+    new = ids_for(parse_ncr.parse(FIXTURES / "Daily-Price-Index-November-10-2026.pdf"), cat)
+    old = ids_for(parse_ncr.parse(FIXTURES / "Daily-Price-Index-October-20-2026.pdf"), cat)
+    for item in ("rice.local-well-milled", "veg.ampalaya", "spice.red-onion-imported", "eggs.white-medium", "other.oil-palm-1l"):
+        assert item in new and item in old, item
+
+
+def test_item_summary_uses_catalog_unit():
+    cat = catalog.load("ncr")
+    h = History("ncr")
+    h.put("eggs.white-medium", date(2026, 10, 20), {"p": 8.25})  # old layout printed "kg"
+    out = build.item_summary(cat.by_id["eggs.white-medium"], h, date(2026, 10, 20))
+    assert out["unit"] == "pc" and out["category"] == "eggs"
 
 
 def report_for(d, price, extra=()):

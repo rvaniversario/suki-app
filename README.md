@@ -1,7 +1,8 @@
 # Suki — wet market price monitor
 
-A mobile-first PWA showing which fish, pork, chicken and beef are a good buy today, from Department of
-Agriculture daily price reports, with a suggested weekly buying plan. See [SPEC.md](SPEC.md).
+A mobile-first PWA showing which goods are a good buy today (fish, meat, eggs, rice, vegetables, fruit,
+spices and more), for every region, from Department of Agriculture price data, with a suggested weekly
+buying plan for fish and meat and an optional "My market" view of one market's prices. See [SPEC.md](docs/SPEC.md).
 
 ```
 app/        React 18 + Vite + TypeScript PWA
@@ -23,17 +24,33 @@ python -m pytest scraper/tests -q
 
 # scraper
 pip install -r scraper/requirements.txt
-python -m scraper run --region all                          # daily: last 10 days, new files only
-python -m scraper backfill --region mimaropa --from 2026-01-01
-python -m scraper rebuild --region all                      # re-parse cached PDFs after a catalog change
+python -m scraper run --region all                          # daily: re-reads the last 21 days
+python -m scraper backfill --region all --days 365           # fill an empty data/ (needed for npm run dev)
 ```
 
-Raw PDFs are cached in `.cache/pdfs/` (git-ignored; the Actions cache keeps them between runs).
+## Deploy
+
+One Docker container serves the app and keeps its own prices current; no rebuild or redeploy is
+needed for new prices. No price data is committed (`data/` is git-ignored).
+
+```sh
+docker compose up -d --build        # http://localhost:8080
+```
+
+- nginx serves the built app; `/data` is served from the `/data` volume.
+- The scraper runs in the same container. On first start (empty volume) it fetches the last
+  `HISTORY_DAYS` days (default 365, about 10 minutes for all 17 regions); until then a region shows
+  "could not load prices". After that it runs every day at 10:00 Manila (`REFRESH_UTC`, default 2),
+  re-reading only the last 21 days. History stays in the volume, so it is never fetched again.
+- Container hosts (VPS, Railway, Render, Fly.io): build from the `Dockerfile`, mount a persistent
+  volume at `/data`, and set `PORT` if the host requires a specific one.
 
 ## Configuration
 
 | Where | Name | Needed for |
 |---|---|---|
+| Container env | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (`PRICE_DB=0` turns it off) | Permanent copy of the price data in Supabase (`scraper/db.py`, migration `20261115000000_prices.sql`). Each run saves what it changed; a container with an empty volume restores from it instead of re-scraping. Seed once with `docker compose exec suki python -m scraper push`. The app never reads the database. |
+| Container env | `GEMINI_API_KEY` (free tier, default) or `OPENAI_API_KEY`; `AI_PROVIDER` (`gemini`/`openai`/`off`), `GEMINI_MODEL`, `OPENAI_MODEL`, `AI_WEB_SEARCH`, `AI_DAILY_REQUESTS`, `AI_DAILY_TOKENS` | AI weekly notes per region and per market (`scraper/insights.py`, `scraper/ai.py`). Off without a key. At most one note request per region per day, only when its prices change, plus a web search only when a good moved 15%+ in a week; a daily cap stops it, and running out of quota pauses it until the next day. |
 | Actions secret | `GOOGLE_DRIVE_API_KEY` | Drive API listing. Optional: without it the public folder view is used. |
 | Actions secret | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VAPID_PRIVATE_KEY` | Sending price drop alerts |
 | Actions variable | `VAPID_SUBJECT` (`mailto:` or https URL), `APP_URL` | Alerts |
@@ -48,6 +65,30 @@ keys once (`npx web-push generate-vapid-keys`).
 
 Hosting: `deploy.yml` publishes to GitHub Pages (enable Pages → "GitHub Actions"). For another static
 host, build `app/` with `npm run build` and serve `app/dist`.
+
+## Data sources
+
+Every region uses the same source and method: the DA **Bantay Presyo** market monitoring. A region's
+price for a good is the median across its markets, and "My market" shows one market's own prices.
+
+The older PDF scrapers (MIMAROPA from Google Drive, NCR from da.gov.ph) are still in `scraper/` but are
+not run. Setting `pdf: True` on a region in `scraper/config.py` switches it back to its PDF report.
+
+**Bantay Presyo** is the DA's public Power BI dashboard (`scraper/sources/powerbi.py`, SPEC section 4.3).
+It uses undocumented endpoints, so any failure is logged as "source unavailable" and never fails a run.
+The scraper only ever queries the price table and never the `ENCODER` column or the contacts table
+(`tbl_csw`); a guard in the query builder and a test enforce this.
+
+- One query per region per run, re-reading the last 21 days because prices are often entered late.
+- Goods are mapped by `COMMODITY` through `scraper/catalog/bantaypresyo.yaml` (91 goods).
+- A market price outside 0.4×–2.5× of the item's 90-day regional median is rejected and logged.
+- Regional point for date d: median of each market's latest price from the
+  7 days up to d, needing at least 2 markets.
+- Every good shows its newest available price, however old, with that price's date. Markets are
+  never hidden; each market price carries its date.
+- Output: `data/{region}/markets.json` (markets, newest date) and `data/{region}/markets/{code}.json`
+  (newest price per good).
+- The source swaps latitude and longitude for many markets; the scraper puts them back.
 
 ## Data notes (from the 2026 backfill)
 

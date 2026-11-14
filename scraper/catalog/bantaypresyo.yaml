@@ -1,0 +1,119 @@
+# Bantay Presyo (Power BI) catalog: COMMODITY -> app item. Shared by every region.
+#
+# Ids match the MIMAROPA and NCR PDF catalogs where the commodity is the same, so a market's
+# price can be shown beside the regional figure and tracked goods carry over between regions.
+# The source has no unit column; `unit` here is what the price is per (default kg).
+#
+# For regions without a PDF report, the regional price is the median across the region's
+# markets on each date (see scraper/markets.py).
+
+# ---------------------------------------------------------------- fish
+- { id: fish.tilapia, name: Tilapia, category: fish, featured: true, commodity: "Tilapia" }
+- { id: fish.bangus-large, name: Bangus (large), category: fish, featured: true, commodity: "Bangus (Large)" }
+- { id: fish.bangus-medium, name: Bangus (medium), category: fish, featured: true, commodity: "Bangus (Medium)" }
+- { id: fish.galunggong-local, name: Galunggong (local), category: fish, featured: true, commodity: "Galunggong(Local)" }
+- { id: fish.galunggong-imported, name: Galunggong (imported), category: fish, commodity: "Galunggong(Imported)" }
+- { id: fish.alumahan, name: Alumahan, category: fish, featured: true, commodity: "Alumahan" }
+- { id: fish.tamban, name: Tamban (sardines), category: fish, featured: true, commodity: "Sardines (Tamban)" }
+- { id: fish.pusit, name: Pusit, category: fish, featured: true, commodity: "Squid (Pusit Bisaya)" }
+- { id: fish.tambakol, name: Tambakol (yellowfin tuna), category: fish, featured: true, commodity: "Yellow-Fin Tuna (Tambakol)" }
+- { id: fish.bonito, name: Bonito, category: fish, commodity: "Bonito" }
+- { id: fish.salmon-head, name: Salmon head, category: fish, commodity: "Salmon Head" }
+
+# ---------------------------------------------------------------- pork
+- { id: pork.kasim, name: Kasim, category: pork, featured: true, detail: Pork ham / picnic shoulder, commodity: "Pork Ham (Kasim)" }
+- { id: pork.liempo, name: Liempo, category: pork, featured: true, detail: Pork belly, commodity: "Pork Belly (Liempo)" }
+- { id: pork.kasim-frozen, name: Kasim (frozen), category: pork, commodity: "Frozen Kasim" }
+- { id: pork.liempo-frozen, name: Liempo (frozen), category: pork, commodity: "Frozen Liempo" }
+
+# ---------------------------------------------------------------- beef
+- { id: beef.brisket, name: Brisket, category: beef, featured: true, commodity: "Beef Brisket" }
+- { id: beef.rump, name: Rump, category: beef, featured: true, commodity: "Beef Rump" }
+
+# ---------------------------------------------------------------- chicken
+- { id: chicken.whole, name: Whole chicken, category: chicken, featured: true, commodity: "Whole Chicken" }
+
+# ---------------------------------------------------------------- eggs (per piece)
+- { id: eggs.white-medium, name: Eggs (white, medium), category: eggs, unit: pc, featured: true, commodity: "Chicken Egg (White, Medium)" }
+- { id: eggs.white-large, name: Eggs (white, large), category: eggs, unit: pc, commodity: "Chicken Egg (White, Large)" }
+- { id: eggs.white-extra-large, name: Eggs (white, extra large), category: eggs, unit: pc, commodity: "Chicken Egg (White, Extra Large)" }
+- { id: eggs.white-jumbo, name: Eggs (white, jumbo), category: eggs, unit: pc, commodity: "Chicken Egg (White, Jumbo)" }
+- { id: eggs.white-small, name: Eggs (white, small), category: eggs, unit: pc, commodity: "Chicken Egg (White, Small)" }
+- { id: eggs.white-extra-small, name: Eggs (white, extra small), category: eggs, unit: pc, commodity: "Chicken Egg (White, Extra Small)" }
+- { id: eggs.white-pewee, name: Eggs (white, pewee), category: eggs, unit: pc, commodity: "Chicken Egg (White, Pewee)" }
+- { id: eggs.brown-medium, name: Eggs (brown, medium), category: eggs, unit: pc, commodity: "Chicken Egg (Brown, Medium)" }
+- { id: eggs.brown-large, name: Eggs (brown, large), category: eggs, unit: pc, commodity: "Chicken Egg (Brown, Large)" }
+- { id: eggs.brown-extra-large, name: Eggs (brown, extra large), category: eggs, unit: pc, commodity: "Chicken Egg (Brown, Extra Large)" }
+
+# ---------------------------------------------------------------- rice
+- { id: rice.local-regular, name: Local rice, regular milled, category: rice, commodity: "COMMERCIAL (LOCAL) Regular Milled" }
+- { id: rice.local-well-milled, name: Local rice, well milled, category: rice, featured: true, commodity: "COMMERCIAL (LOCAL) Well Milled" }
+- { id: rice.local-premium, name: Local rice, premium, category: rice, commodity: "COMMERCIAL (LOCAL) Premium (Yellow tagged)" }
+- { id: rice.local-special, name: Local rice, special, category: rice, commodity: "COMMERCIAL (LOCAL) Special (Blue tagged)" }
+- { id: rice.imported-regular, name: Imported rice, regular milled, category: rice, commodity: "COMMERCIAL (IMPORTED) Regular Milled" }
+- { id: rice.imported-well-milled, name: Imported rice, well milled, category: rice, commodity: "COMMERCIAL (IMPORTED) Well Milled" }
+- { id: rice.imported-premium, name: Imported rice, premium, category: rice, commodity: "COMMERCIAL (IMPORTED) Premium (Yellow tagged)" }
+- { id: rice.imported-special, name: Imported rice, special, category: rice, commodity: "COMMERCIAL (IMPORTED) Special (Blue tagged)" }
+- { id: rice.nfa, name: NFA rice, category: rice, commodity: "NFA" }
+
+# ---------------------------------------------------------------- vegetables
+- { id: veg.ampalaya, name: Ampalaya, category: vegetables, commodity: "Ampalaya" }
+- { id: veg.eggplant, name: Eggplant (talong), category: vegetables, commodity: "Eggplant" }
+- { id: veg.pechay-native, name: Pechay (native), category: vegetables, commodity: "Pechay (Native)" }
+- { id: veg.sitao, name: Sitaw, category: vegetables, commodity: "Sitao" }
+- { id: veg.squash, name: Kalabasa (squash), category: vegetables, commodity: "Squash" }
+- { id: veg.tomato, name: Tomato, category: vegetables, featured: true, commodity: "Tomato" }
+- { id: veg.bell-pepper-green, name: Bell pepper (green), category: vegetables, commodity: "Bell Pepper (Green)" }
+- { id: veg.bell-pepper-red, name: Bell pepper (red), category: vegetables, commodity: "Bell Pepper (Red)" }
+- { id: veg.broccoli, name: Broccoli, category: vegetables, commodity: "Broccoli" }
+- { id: veg.cauliflower, name: Cauliflower, category: vegetables, commodity: "Cauliflower" }
+- { id: veg.cabbage-scorpio, name: Cabbage (scorpio), category: vegetables, commodity: "Cabbage (Scorpio)" }
+- { id: veg.cabbage-rare-ball, name: Cabbage (rare ball), category: vegetables, commodity: "Cabbage (Rare Ball)" }
+- { id: veg.cabbage-wonder-ball, name: Cabbage (wonder ball), category: vegetables, commodity: "Cabbage (Wonder Ball)" }
+- { id: veg.carrots, name: Carrots, category: vegetables, commodity: "Carrots" }
+- { id: veg.celery, name: Celery, category: vegetables, commodity: "Celery" }
+- { id: veg.chayote, name: Sayote (chayote), category: vegetables, commodity: "Chayote" }
+- { id: veg.habichuelas, name: Baguio beans (habichuelas), category: vegetables, commodity: "Habichuelas (Baguio Bean)" }
+- { id: veg.lettuce-green-ice, name: Lettuce (green ice), category: vegetables, commodity: "Lettuce (Green Ice)" }
+- { id: veg.lettuce-iceberg, name: Lettuce (iceberg), category: vegetables, commodity: "Lettuce (Iceberg)" }
+- { id: veg.lettuce-romaine, name: Lettuce (romaine), category: vegetables, commodity: "Lettuce (Romaine)" }
+- { id: veg.pechay-baguio, name: Pechay (Baguio), category: vegetables, commodity: "Pechay (Baguio)" }
+- { id: veg.potato, name: Potato, category: vegetables, commodity: "White Potato" }
+
+# ---------------------------------------------------------------- spices
+- { id: spice.red-onion, name: Red onion (local), category: spices, featured: true, commodity: "Red Onion" }
+- { id: spice.red-onion-imported, name: Red onion (imported), category: spices, commodity: "Red Onion (Imported)" }
+- { id: spice.white-onion, name: White onion (local), category: spices, commodity: "White Onion" }
+- { id: spice.white-onion-imported, name: White onion (imported), category: spices, commodity: "White Onion (Imported)" }
+- { id: spice.garlic-native, name: Garlic (native), category: spices, commodity: "Garlic(Native)" }
+- { id: spice.garlic-imported, name: Garlic (imported), category: spices, commodity: "Garlic(Imported)" }
+- { id: spice.ginger, name: Ginger (luya), category: spices, commodity: "Ginger" }
+- { id: spice.chili-red, name: Red chili (siling labuyo), category: spices, commodity: "Chili (Red)" }
+
+# ---------------------------------------------------------------- fruits
+- { id: fruit.banana-lakatan, name: Banana (lakatan), category: fruits, commodity: "Banana (Lakatan)" }
+- { id: fruit.banana-latundan, name: Banana (latundan), category: fruits, commodity: "Banana (Latundan)" }
+- { id: fruit.banana-saba, name: Banana (saba), category: fruits, commodity: "Banana (Saba)" }
+- { id: fruit.calamansi, name: Calamansi, category: fruits, commodity: "Calamansi" }
+- { id: fruit.mango-carabao, name: Mango (carabao), category: fruits, commodity: "Mango (Carabao)" }
+- { id: fruit.papaya, name: Papaya, category: fruits, commodity: "Papaya" }
+- { id: fruit.avocado, name: Avocado, category: fruits, commodity: "Avocado" }
+- { id: fruit.melon, name: Melon, category: fruits, commodity: "Melon" }
+- { id: fruit.watermelon, name: Watermelon, category: fruits, commodity: "Watermelon" }
+- { id: fruit.pomelo, name: Pomelo, category: fruits, commodity: "Pomelo" }
+
+# ---------------------------------------------------------------- other
+- { id: other.sugar-refined, name: Sugar (refined), category: other, commodity: "Sugar (Refined)" }
+- { id: other.sugar-washed, name: Sugar (washed), category: other, commodity: "Sugar (Washed)" }
+- { id: other.sugar-brown, name: Sugar (brown), category: other, commodity: "Sugar (Brown)" }
+- { id: other.oil-palm-1l, name: Cooking oil (palm), category: other, unit: bottle, detail: 1 L bottle, commodity: "Cooking Oil Palm 1L" }
+- { id: other.oil-palm-350ml, name: Cooking oil (palm), category: other, unit: bottle, detail: 350 ml bottle, commodity: "Cooking Oil Palm 350ML" }
+- { id: other.oil-coconut-1l, name: Cooking oil (coconut), category: other, unit: bottle, detail: 1 L bottle, commodity: "Cooking Oil (Coconut) 1L" }
+- { id: other.oil-coconut-350ml, name: Cooking oil (coconut), category: other, unit: bottle, detail: 350 ml bottle, commodity: "Cooking Oil (Coconut) 350ML" }
+- { id: other.mungbean, name: Munggo (mung beans), category: other, commodity: "Mungbean" }
+- { id: other.corn-white, name: Corn (white), category: other, detail: Cob, glutinous, commodity: "Corn (White)" }
+- { id: other.corn-yellow, name: Corn (yellow), category: other, detail: Cob, sweet corn, commodity: "Corn (Yellow)" }
+- { id: other.corn-grits-white, name: Corn grits (white, food grade), category: other, commodity: "Corn Grits (White, Food Grade)" }
+- { id: other.corn-grits-yellow, name: Corn grits (yellow, food grade), category: other, commodity: "Corn Grits (Yellow, Food Grade)" }
+- { id: other.corn-grits-feed, name: Corn grits (feed grade), category: other, commodity: "Corn Grits (Feed Grade)" }
+- { id: other.corn-cracked-feed, name: Cracked corn (feed grade), category: other, commodity: "Corn Cracked (Yellow, Feed Grade)" }

@@ -67,37 +67,45 @@ def apply_report(report: Report, catalog: Catalog, history: History) -> list[str
 
 
 def item_summary(entry, history: History, as_of: date) -> dict:
+    """An item's newest available price on or before `as_of`, however old, with its date.
+
+    The baseline, score and "lowest in 90 days" are worked out on that price's own date.
+    """
     series = history.series(entry.id)
-    today = next((p for d, p in series if d == as_of), None)
-    raw = history.items.get(entry.id, {}).get(as_of.isoformat(), {})
-    base = analytics.baseline(series, as_of)
-    s = analytics.score(today, base)
+    priced = [(d, p) for d, p in series if p is not None and d <= as_of]
+    day, price = priced[-1] if priced else (None, None)
+    raw = history.items.get(entry.id, {}).get(day.isoformat(), {}) if day else {}
+    base = analytics.baseline(series, day) if day else None
+    s = analytics.score(price, base)
     out = {
         "id": entry.id,
         "name": entry.name,
         "category": entry.category,
-        "unit": raw.get("u", "kg"),
-        "price": today,
+        "unit": entry.unit or raw.get("u", "kg"),
+        "price": price,
+        "date": day.isoformat() if day else None,
         "low": raw.get("lo"),
         "high": raw.get("hi"),
         "baseline": base,
         "pctVsBaseline": s,
         "status": analytics.status(s),
-        "daysOfHistory": sum(1 for d, p in series if p is not None and d <= as_of),
+        "daysOfHistory": len(priced),
         "featured": entry.featured,
-        "lowest90": analytics.is_window_low(series, as_of, today),
+        "lowest90": analytics.is_window_low(series, day, price) if day else False,
     }
     if entry.detail:
         out["detail"] = entry.detail
     return out
 
 
-def latest(region: str, catalog: Catalog, history: History, as_of: date) -> dict:
+def latest(region: str, catalog: Catalog, history: History, as_of: date, skip_unreported: bool = False) -> dict:
+    """`skip_unreported` leaves out goods the region has never reported (market-median regions)."""
+    entries = [e for e in catalog.entries if not skip_unreported or history.items.get(e.id)]
     return {
         "region": region,
         "asOf": as_of.isoformat(),
         "generatedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "items": [item_summary(e, history, as_of) for e in catalog.entries],
+        "items": [item_summary(e, history, as_of) for e in entries],
     }
 
 
@@ -112,14 +120,21 @@ def latest_report_date(history: History, catalog: Catalog) -> date | None:
     return best
 
 
-def write_latest(region: str, catalog: Catalog, history: History) -> dict | None:
+def write_latest(region: str, catalog: Catalog, history: History, skip_unreported: bool = False) -> dict | None:
+    """latest.json "as of" the region's newest price; each item carries its own newest price and date."""
     as_of = latest_report_date(history, catalog)
     if as_of is None:
         return None
-    body = latest(region, catalog, history, as_of)
+    body = latest(region, catalog, history, as_of, skip_unreported=skip_unreported)
     write_json(region_dir(region) / "latest.json", body)
     return body
 
 
+PUBLIC_REGION_FIELDS = ("id", "name", "status", "source", "hasRange", "markets")
+
+
 def write_regions() -> None:
-    write_json(config.DATA_DIR / "regions.json", config.REGIONS)
+    write_json(
+        config.DATA_DIR / "regions.json",
+        [{k: r[k] for k in PUBLIC_REGION_FIELDS if k in r} for r in config.REGIONS],
+    )

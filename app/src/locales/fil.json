@@ -21,7 +21,8 @@
     "retry": "Subukan ulit",
     "loadError": "Hindi makuha ang mga presyo. Tingnan ang koneksyon at subukan ulit.",
     "offline": "Walang internet — presyo noong {{date}} ang nakikita mo",
-    "skipToContent": "Diretso sa laman"
+    "skipToContent": "Diretso sa laman",
+    "priceFrom": "Presyo noong {{date}}"
   },
   "categories": {
     "all": "Lahat",
@@ -29,6 +30,11 @@
     "pork": "Baboy",
     "chicken": "Manok",
     "beef": "Baka",
+    "eggs": "Itlog",
+    "rice": "Bigas",
+    "vegetables": "Gulay",
+    "fruits": "Prutas",
+    "spices": "Sibuyas, bawang at rekado",
     "other": "Iba pa"
   },
   "chip": {
@@ -162,7 +168,7 @@
     "title": "Mga sinusundang paninda",
     "subtitle": "{{count}} ang pinili. Ito lang ang lalabas sa listahan at plano mo.",
     "search": "Hanapin ang paninda",
-    "reset": "Gamitin ang mungkahing listahan",
+    "reset": "Sundan ulit lahat ng paninda",
     "noResults": "Walang tugma sa “{{q}}”."
   },
   "region": {
@@ -210,5 +216,53 @@
     "itemLowest": "{{name}} pinakamura sa 90 araw",
     "more": "at {{count}} pa",
     "separator": ", "
+  },
+  "units": {
+    "kg": "/kilo",
+    "pc": "/piraso",
+    "bottle": "/bote"
+  },
+  "unitsLong": {
+    "kg": "kada kilo",
+    "pc": "kada piraso",
+    "bottle": "kada bote"
+  },
+  "market": {
+    "title": "Piliin ang palengke mo",
+    "body": "Tingnan ang presyo sa isang palengke sa {{region}}, katabi ng presyo sa buong rehiyon. Nakasaad ang petsa ng pinakabagong presyo ng bawat palengke.",
+    "search": "Hanapin ang palengke",
+    "none": "Walang palengke (presyo ng rehiyon lang)",
+    "use": "Gamitin ang {{market}}",
+    "useNone": "Presyo ng rehiyon lang",
+    "noData": "Wala pang presyo",
+    "noResults": "Walang palengkeng tugma sa “{{q}}”.",
+    "setting": "Palengke ko",
+    "settingHelp": "Hindi kailangan. Presyo kada palengke mula sa Bantay Presyo ng DA.",
+    "pick": "Pumili ng palengke",
+    "mine": "Palengke ko: {{market}}",
+    "asOf": "Presyo noong {{date}}",
+    "seeAll": "Lahat ng presyo rito",
+    "price": "{{market}}: {{price}}",
+    "vsAbove": "{{pct}}% mas mahal kaysa sa rehiyon",
+    "vsBelow": "{{pct}}% mas mura kaysa sa rehiyon",
+    "vsSame": "Kapareho ng presyo sa rehiyon",
+    "notReported": "Wala pang presyo sa {{market}}",
+    "colMarket": "Palengke",
+    "pageTitle": "{{market}}",
+    "pageSubtitle": "Pinakabagong presyo ng bawat paninda sa palengkeng ito, katabi ng presyo sa {{region}}",
+    "regional": "Rehiyon {{price}}",
+    "dated": "Presyo noong {{date}}",
+    "empty": "Walang bagong presyo ang palengkeng ito.",
+    "noMarket": "Pumili ng palengke para makita ang presyo nito.",
+    "loadError": "Hindi ma-load ang presyo ng palengkeng ito."
+  },
+  "insights": {
+    "title": "Ngayong linggo",
+    "byAi": "Isinulat ng AI mula sa presyo ng DA noong {{date}}. Tiyakin ang presyo sa palengke.",
+    "dishes": "Mga ideya sa ulam",
+    "about": "mga {{cost}}",
+    "why": "Bakit gumalaw ang presyo",
+    "whyNote": "Buod ng AI mula sa mga balitang naka-link; galing sa DA ang mga presyo sa itaas.",
+    "aiTag": "AI"
   }
 }

@@ -20,7 +20,8 @@
     "retry": "Try again",
     "loadError": "Could not load prices. Check your connection and try again.",
     "offline": "Offline — showing prices as of {{date}}",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "priceFrom": "Price from {{date}}"
   },
   "categories": {
     "all": "All",
@@ -28,6 +29,11 @@
     "pork": "Pork",
     "chicken": "Chicken",
     "beef": "Beef",
+    "eggs": "Eggs",
+    "rice": "Rice",
+    "vegetables": "Vegetables",
+    "fruits": "Fruits",
+    "spices": "Onion, garlic & spices",
     "other": "Other"
   },
   "chip": {
@@ -161,7 +167,7 @@
     "title": "Goods to track",
     "subtitle": "{{count}} tracked. Only these appear in your ranking and plan.",
     "search": "Search goods",
-    "reset": "Use the suggested list",
+    "reset": "Track all goods again",
     "noResults": "No goods match “{{q}}”."
   },
   "region": {
@@ -209,5 +215,53 @@
     "itemLowest": "{{name}} at its lowest in 90 days",
     "more": "and {{count}} more",
     "separator": ", "
+  },
+  "units": {
+    "kg": "/kg",
+    "pc": "/pc",
+    "bottle": "/bottle"
+  },
+  "unitsLong": {
+    "kg": "per kilo",
+    "pc": "per piece",
+    "bottle": "per bottle"
+  },
+  "market": {
+    "title": "Choose your market",
+    "body": "See what one market in {{region}} charges, beside the regional price. The date shows each market's newest prices.",
+    "search": "Search markets",
+    "none": "No market (regional prices only)",
+    "use": "Use {{market}}",
+    "useNone": "Use regional prices only",
+    "noData": "No prices yet",
+    "noResults": "No markets match “{{q}}”.",
+    "setting": "My market",
+    "settingHelp": "Optional. Prices per market from the DA Bantay Presyo monitoring.",
+    "pick": "Choose a market",
+    "mine": "My market: {{market}}",
+    "asOf": "Prices as of {{date}}",
+    "seeAll": "All prices here",
+    "price": "{{market}}: {{price}}",
+    "vsAbove": "{{pct}}% above the regional price",
+    "vsBelow": "{{pct}}% below the regional price",
+    "vsSame": "Same as the regional price",
+    "notReported": "No price at {{market}} yet",
+    "colMarket": "Market",
+    "pageTitle": "{{market}}",
+    "pageSubtitle": "Newest price of every good at this market, beside the {{region}} price",
+    "regional": "Region {{price}}",
+    "dated": "Price from {{date}}",
+    "empty": "This market has no recent prices.",
+    "noMarket": "Choose a market to see its prices.",
+    "loadError": "Could not load this market's prices."
+  },
+  "insights": {
+    "title": "This week",
+    "byAi": "Written by AI from DA prices as of {{date}}. Check prices at the market.",
+    "dishes": "Ulam ideas",
+    "about": "about {{cost}}",
+    "why": "Why prices moved",
+    "whyNote": "AI summary of the linked news; prices above are DA's.",
+    "aiTag": "AI"
   }
 }

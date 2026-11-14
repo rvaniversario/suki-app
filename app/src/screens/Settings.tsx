@@ -201,8 +201,8 @@ function AccountRow() {
 
 export function Settings() {
   const { t } = useI18n();
-  const { settings, update, region, tracked } = useApp();
-  const { openRegionPicker } = useUI();
+  const { settings, update, region, tracked, market, markets } = useApp();
+  const { openRegionPicker, openMarketPicker } = useUI();
   const total = CATEGORIES.reduce((s, c) => s + settings.usualKg[c], 0);
 
   return (
@@ -222,6 +222,19 @@ export function Settings() {
           <span className="action">{t('common.change')}</span>
         </button>
       </section>
+
+      {region?.markets && markets.data && markets.data.markets.length > 0 && (
+        <section className="section">
+          <h2 className="section-title">{t('market.setting')}</h2>
+          <button type="button" className="panel-row card-link" onClick={openMarketPicker}>
+            <span className="label">
+              {market?.name ?? t('market.none')}
+              <small>{t('market.settingHelp')}</small>
+            </span>
+            <span className="action">{market ? t('common.change') : t('settings.choose')}</span>
+          </button>
+        </section>
+      )}
 
       <section className="section">
         <h2 className="section-title">{t('settings.usual')}</h2>

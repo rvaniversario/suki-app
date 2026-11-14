@@ -1,0 +1,36 @@
+services:
+  suki:
+    build:
+      context: .
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+        VITE_VAPID_PUBLIC_KEY: ${VITE_VAPID_PUBLIC_KEY:-}
+    image: suki
+    ports:
+      - "${HOST_PORT:-8080}:80"
+    environment:
+      HISTORY_DAYS: ${HISTORY_DAYS:-365}
+      REFRESH_UTC: ${REFRESH_UTC:-2}
+      # Optional: AI notes per region (scraper/insights.py, scraper/ai.py).
+      # Gemini (free tier) is used when GEMINI_API_KEY is set; OpenAI is kept as an alternative.
+      AI_PROVIDER: ${AI_PROVIDER:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-4-hydrogen}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-5-mini}
+      AI_WEB_SEARCH: ${AI_WEB_SEARCH:-1}
+      AI_DAILY_REQUESTS: ${AI_DAILY_REQUESTS:-40}
+      AI_DAILY_TOKENS: ${AI_DAILY_TOKENS:-600000}
+      # Optional: price drop alerts (see README, Configuration).
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-}
+      SUKI_APP_URL: ${APP_URL:-/}
+    volumes:
+      - prices:/data
+    restart: unless-stopped
+
+volumes:
+  prices:

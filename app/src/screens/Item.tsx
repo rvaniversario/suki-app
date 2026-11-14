@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useI18n } from '../i18n';
 import { BackIcon } from '../components/Icons';
+import { MarketCompare, PriceDate, unitLong } from '../components/MarketPrice';
 import { LoadState } from '../components/Notices';
 import { PriceChart } from '../components/PriceChart';
 import { StatusChip } from '../components/StatusChip';
@@ -80,12 +81,13 @@ export function Item() {
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
             <span className="big-figure">{peso(item.price, lang)}</span>
             <span className="muted" style={{ fontSize: 15 }}>
-              {item.unit === 'kg' ? t('item.perKilo') : `/ ${item.unit}`}
+              {unitLong(t, item.unit)}
             </span>
           </div>
         ) : (
           <p className="notice neutral">{t('item.noPrice')}</p>
         )}
+        <PriceDate item={item} />
         {item.price !== null && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <StatusChip item={item} large />
@@ -95,6 +97,7 @@ export function Item() {
         {region?.hasRange && item.low !== null && item.high !== null && (
           <span className="detail">{t('item.range', { low: pesoWhole(item.low, lang), high: pesoWhole(item.high, lang) })}</span>
         )}
+        <MarketCompare item={item} />
       </div>
 
       <div className="segmented" role="group" aria-label={t('item.rangeGroup')}>

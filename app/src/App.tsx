@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { detectLanguage, I18nProvider, useI18n } from './i18n';
 import { InstallSheet } from './components/InstallSheet';
 import { Rail, Sidebar, TabBar } from './components/Nav';
+import { MarketPicker } from './components/MarketPicker';
 import { RegionPicker } from './components/RegionPicker';
 import { countVisit, isIOS, isStandalone, shouldOfferInstall, snooze, type BeforeInstallPromptEvent } from './lib/install';
 import { pushAvailability, updateAlerts } from './lib/push';
@@ -10,6 +11,7 @@ import type { Settings as SettingsT } from './lib/settings';
 import { useApplyTheme } from './lib/theme';
 import { Goods } from './screens/Goods';
 import { History } from './screens/History';
+import { Market } from './screens/Market';
 import { Item } from './screens/Item';
 import { Plan } from './screens/Plan';
 import { Privacy } from './screens/Privacy';
@@ -82,6 +84,7 @@ function Shell() {
   const { settings, update, regions, region, tracked } = app;
   const { t } = useI18n();
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [marketPickerOpen, setMarketPickerOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const install = useInstall();
 
@@ -113,6 +116,7 @@ function Shell() {
   const ui: UI = useMemo(
     () => ({
       openRegionPicker: () => setPickerOpen(true),
+      openMarketPicker: () => setMarketPickerOpen(true),
       openInstall: install.installed ? null : () => startInstall(install),
       toast: setToast,
     }),
@@ -133,6 +137,7 @@ function Shell() {
             <Route path="/plan" element={<Plan />} />
             <Route path="/history" element={<History />} />
             <Route path="/item/:id" element={<Item />} />
+            <Route path="/market" element={<Market />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/settings/goods" element={<Goods />} />
             <Route path="/signin" element={<SignIn />} />
@@ -153,7 +158,19 @@ function Shell() {
           onClose={needsRegion ? undefined : () => setPickerOpen(false)}
         />
       )}
-      {install.open && !pickerOpen && !needsRegion && (
+      {marketPickerOpen && region && app.markets.data && (
+        <MarketPicker
+          index={app.markets.data}
+          regionName={region.name}
+          current={app.market?.code ?? null}
+          onChoose={(code) => {
+            app.setMarket(code);
+            setMarketPickerOpen(false);
+          }}
+          onClose={() => setMarketPickerOpen(false)}
+        />
+      )}
+      {install.open && !pickerOpen && !marketPickerOpen && !needsRegion && (
         <InstallSheet onInstall={install.canPrompt ? install.prompt : null} ios={isIOS()} onNotNow={install.notNow} />
       )}
       {toast && (

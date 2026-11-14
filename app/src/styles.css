@@ -1291,3 +1291,125 @@ h3 {
     border-radius: var(--radius-card);
   }
 }
+
+/* ---------------------------------------------------------------- my market */
+.market-line {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--muted);
+}
+.market-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.market-bar .label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 15px;
+  line-height: 20px;
+}
+.market-bar .label small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.market-bar .actions {
+  display: flex;
+  gap: 16px;
+}
+.market-compare {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.market-compare .label {
+  font-weight: 600;
+}
+.market-compare .price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-align: right;
+}
+.market-compare .detail {
+  grid-column: 1 / -1;
+}
+
+/* ---------------------------------------------------------------- AI weekly note */
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.insights-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+}
+.insights h2 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+}
+.insights h3 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.insights-brief {
+  margin: 0;
+  font-size: 15px;
+  line-height: 22px;
+}
+.insights-dishes,
+.insights-notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.insights-dishes li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dish-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.insights a {
+  color: inherit;
+}
+
+.insights-sources {
+  margin: 0;
+  padding-left: 18px;
+}
+.insights-sources a {
+  text-decoration: underline;
+}
+.market-ai {
+  font-size: 13px;
+  line-height: 18px;
+}
